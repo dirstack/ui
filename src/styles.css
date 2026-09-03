@@ -1,0 +1,202 @@
+@plugin "tailwindcss-animate";
+
+/*
+ * Scan this library's own source for utility classes. `@source` resolves relative to
+ * THIS stylesheet, so the same directive works in both consumption modes:
+ *   - built:  node_modules/@dirstack/ui/dist/styles.css scans the sibling dist folder (.js)
+ *   - source: @dirstack/ui/src/styles.css scans the sibling src folder (.ts, .tsx)
+ * Either way the class names baked into the components (bg-background,
+ * text-muted-foreground, the popover animation utilities, etc.) get generated.
+ * The consuming app still owns the `@import "tailwindcss"` in its own entry.
+ */
+@source "./";
+
+@theme {
+  --system-font:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+
+  --color-background: oklch(0.985 0.001 106.423);
+  --color-foreground: oklch(0.205 0 0);
+  --color-card: oklch(1 0 0);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.205 0 0);
+  --color-primary: oklch(0.205 0 0);
+  --color-primary-foreground: oklch(0.985 0 0);
+  --color-secondary-foreground: oklch(0.371 0 0);
+  --color-muted: oklch(0.97 0.001 106.424);
+  --color-muted-foreground: oklch(0.556 0 0);
+  --color-accent: oklch(0.97 0.001 106.424);
+  --color-accent-foreground: oklch(0.371 0 0);
+  --color-destructive: oklch(0.545 0.167 25.73);
+
+  /*
+   * Status tones. Each is a trio: the solid (dots, filled chips, toasts),
+   * `-foreground` for text on the page canvas (>= 4.5:1 there — amber-600
+   * only reaches 3.19:1, hence amber-700), and `-subtle` for tinted fills.
+   * `danger` mirrors `destructive`, which stays for Button's variant.
+   */
+  --color-success: oklch(0.627 0.194 149.214);
+  --color-success-foreground: oklch(0.527 0.154 150.069);
+  --color-success-subtle: oklch(0.527 0.154 150.069 / 5%);
+  --color-warning: oklch(0.769 0.188 70.08);
+  --color-warning-foreground: oklch(0.555 0.163 48.998);
+  --color-warning-subtle: oklch(0.555 0.163 48.998 / 5%);
+  --color-danger: oklch(0.545 0.167 25.73);
+  --color-danger-foreground: oklch(0.505 0.213 27.518);
+  --color-danger-subtle: oklch(0.505 0.213 27.518 / 5%);
+  --color-border: oklch(0.923 0.003 48.717);
+  --color-input: oklch(0.869 0.005 56.366);
+  --color-ring: oklch(0.869 0.005 56.366);
+  --color-chart-1: oklch(0.52 0.11 245);
+  --color-sidebar: oklch(0.985 0.001 106.423);
+
+  --tracking-micro: -0.0125em;
+
+  /*
+   * The height of a default control: an `md` Button, a segmented Tabs track, and the
+   * skeletons that stand in for either. Spelled as `h-control` / `min-h-control` so the
+   * number lives in one place.
+   */
+  --spacing-control: 34px;
+
+  --font-sans: "Inter Variable", var(--system-font);
+  --font-display: "Inter Variable", var(--system-font);
+  --font-mono: monospace;
+
+  --animate-slide-down-and-fade: slide-down-and-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up-and-fade: slide-up-and-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-fill-bar: fill-bar 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes slide-down-and-fade {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-up-and-fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fill-bar {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/*
+ * Dark palette. `auto`/unset follows the OS; `[data-theme="dark"|"light"]`
+ * forces a theme (the embed's `?theme=` control). The token list is duplicated
+ * because CSS can't share a declaration block across an at-rule and a selector.
+ */
+@layer base {
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+      --color-background: oklch(0.147 0.004 49.25);
+      --color-foreground: oklch(0.985 0 0);
+      --color-card: oklch(0.216 0.006 56.043);
+      --color-popover: oklch(0.216 0.006 56.043);
+      --color-popover-foreground: oklch(0.985 0 0);
+      --color-primary: oklch(0.97 0.001 106.424);
+      --color-primary-foreground: oklch(0.205 0 0);
+      --color-secondary-foreground: oklch(0.985 0 0);
+      --color-muted: oklch(0.268 0.007 34.298);
+      --color-muted-foreground: oklch(0.708 0 0);
+      --color-accent: oklch(0.268 0.007 34.298);
+      --color-accent-foreground: oklch(0.985 0 0);
+      --color-destructive: oklch(0.704 0.191 22.216);
+      --color-success: oklch(0.627 0.194 149.214);
+      --color-success-foreground: oklch(0.792 0.209 151.711);
+      --color-success-subtle: oklch(0.871 0.15 154.449 / 10%);
+      --color-warning: oklch(0.769 0.188 70.08);
+      --color-warning-foreground: oklch(0.828 0.189 84.429);
+      --color-warning-subtle: oklch(0.879 0.169 91.605 / 10%);
+      --color-danger: oklch(0.704 0.191 22.216);
+      --color-danger-foreground: oklch(0.704 0.191 22.216);
+      --color-danger-subtle: oklch(0.808 0.114 19.571 / 10%);
+      --color-border: oklch(1 0 0 / 8%);
+      --color-input: oklch(1 0 0 / 14%);
+      --color-ring: oklch(1 0 0 / 18%);
+      --color-chart-1: oklch(0.68 0.13 245);
+      --color-sidebar: oklch(0.147 0.004 49.25);
+    }
+  }
+
+  [data-theme="dark"] {
+    --color-background: oklch(0.147 0.004 49.25);
+    --color-foreground: oklch(0.985 0 0);
+    --color-card: oklch(0.216 0.006 56.043);
+    --color-popover: oklch(0.216 0.006 56.043);
+    --color-popover-foreground: oklch(0.985 0 0);
+    --color-primary: oklch(0.97 0.001 106.424);
+    --color-primary-foreground: oklch(0.205 0 0);
+    --color-secondary-foreground: oklch(0.985 0 0);
+    --color-muted: oklch(0.268 0.007 34.298);
+    --color-muted-foreground: oklch(0.708 0 0);
+    --color-accent: oklch(0.268 0.007 34.298);
+    --color-accent-foreground: oklch(0.985 0 0);
+    --color-destructive: oklch(0.704 0.191 22.216);
+    --color-success: oklch(0.627 0.194 149.214);
+    --color-success-foreground: oklch(0.792 0.209 151.711);
+    --color-success-subtle: oklch(0.871 0.15 154.449 / 10%);
+    --color-warning: oklch(0.769 0.188 70.08);
+    --color-warning-foreground: oklch(0.828 0.189 84.429);
+    --color-warning-subtle: oklch(0.879 0.169 91.605 / 10%);
+    --color-danger: oklch(0.704 0.191 22.216);
+    --color-danger-foreground: oklch(0.704 0.191 22.216);
+    --color-danger-subtle: oklch(0.808 0.114 19.571 / 10%);
+    --color-border: oklch(1 0 0 / 8%);
+    --color-input: oklch(1 0 0 / 14%);
+    --color-ring: oklch(1 0 0 / 18%);
+    --color-chart-1: oklch(0.68 0.13 245);
+    --color-sidebar: oklch(0.147 0.004 49.25);
+  }
+}
+
+/*
+ * Base helpers the components depend on to render correctly. These are not app-specific:
+ * `.bg-dashed` backs the Overlay/Dialog backdrop, and the icon-sizing rule gives every
+ * Hugeicons-backed icon a `1em` default so a `size-*` class or the surrounding font size
+ * drives it. Kept minimal on purpose; the consuming app still supplies the global reset,
+ * fonts, and `@import "tailwindcss"`.
+ */
+@layer base {
+  /* Dashed background used by the Overlay/Dialog backdrop. */
+  .bg-dashed {
+    background-image: linear-gradient(
+      45deg,
+      var(--color-border) 12.5%,
+      transparent 12.5%,
+      transparent 50%,
+      var(--color-border) 50%,
+      var(--color-border) 62.5%,
+      transparent 62.5%,
+      transparent 100%
+    );
+    background-color: color-mix(in oklch, var(--color-foreground), transparent 90%);
+    background-size: 0.25rem 0.25rem;
+  }
+}
+
+/* Default every icon to 1em unless the call site sets an explicit size. */
+svg[aria-label*="Icon"]:not([class*="size-"]):not([class*="h-"]) {
+  @apply size-[1em]!;
+}
