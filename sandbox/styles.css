@@ -1,0 +1,7 @@
+/*
+ * Sandbox stylesheet. Pulls in Tailwind itself (the library ships utility-class strings but
+ * leaves the `@import "tailwindcss"` to the consumer), then the library's own tokens, dark
+ * mode, and animation plugin from source — so every fixture renders against the real theme.
+ */
+@import "tailwindcss";
+@import "../src/styles.css";
