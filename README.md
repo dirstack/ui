@@ -16,7 +16,6 @@ Import each component from its own subpath:
 ```tsx
 import { Button } from "@dirstack/ui/button"
 import { Dialog, DialogContent, DialogTitle } from "@dirstack/ui/dialog"
-import { CheckIcon } from "@dirstack/ui/icons"
 import { cn, variants } from "@dirstack/ui/variants"
 
 export function Example() {
@@ -24,7 +23,7 @@ export function Example() {
 }
 ```
 
-The three shared helpers live at fixed subpaths: `@dirstack/ui/variants` (`cn`, `variants`, `VariantProps`), `@dirstack/ui/classes` (shared class strings), and `@dirstack/ui/slot`.
+The shared helpers live at fixed subpaths: `@dirstack/ui/variants` (`cn`, `variants`, `VariantProps`), `@dirstack/ui/classes` (shared class strings), `@dirstack/ui/slot`, and `@dirstack/ui/interactive` (`interactiveVariants`).
 
 ## Styles
 
@@ -35,19 +34,23 @@ The package ships its own theme. Import it once in your Tailwind v4 entry, after
 @import "@dirstack/ui/styles.css";
 ```
 
-That stylesheet carries the full design-token set (`--color-*`, `--font-*`, `--spacing-*`, keyframes), the dark-mode palette (OS `prefers-color-scheme` plus a forced `[data-theme="dark"]`), the `tailwindcss-animate` plugin, and a `@source` directive that scans the library so its utility classes are generated for you. You do not need to add the package to your own `@source` list.
+That stylesheet carries the full design-token set (`--color-*` mirroring the shadcn/ui variable names plus `success`/`warning`/`danger` trios, `--font-*`, `--spacing-*`, keyframes), the `tailwindcss-animate` plugin, and a `@source` directive that scans the library so its utility classes are generated for you. You do not need to add the package to your own `@source` list.
+
+Every color is a `light-dark()` pair driven by `color-scheme`: left alone it follows the OS, and `data-theme="dark"` or `data-theme="light"` on `<html>` forces one. The theme expects the consumer to load the "Inter Variable" font; without it, type falls back to the system stack.
 
 Override any token in your own CSS to re-theme:
 
 ```css
 @theme {
-  --color-primary: oklch(0.6 0.2 250);
+  --color-primary: light-dark(oklch(0.6 0.2 250), oklch(0.7 0.18 250));
 }
 ```
 
 ## Peer dependencies
 
 - `react` >= 19 and `react-dom` >= 19
+- `@base-ui/react` >= 1
+- `react-hook-form` >= 7 (only for the form components)
 - `tailwindcss` >= 4
 - `tailwindcss-animate` >= 1
 

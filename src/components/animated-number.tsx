@@ -1,3 +1,5 @@
+"use client"
+
 import NumberFlow, { continuous } from "@number-flow/react"
 import type { ComponentProps } from "react"
 import { ANIMATION_DURATION, ANIMATION_EASING } from "~/lib/animation"
@@ -22,7 +24,6 @@ export function AnimatedNumber({ value, ...props }: AnimatedNumberProps) {
 
   return (
     <NumberFlow
-      locales={navigator.language}
       plugins={[continuous]}
       transformTiming={timing}
       opacityTiming={timing}

@@ -2,7 +2,7 @@ import { Callout, CalloutText } from "~/components/callout"
 import { Stack } from "~/components/stack"
 import { InfoIcon } from "./icons"
 
-const variants = ["default", "warning", "success", "danger"] as const
+const variants = ["soft", "warning", "success", "danger"] as const
 
 export default {
   variants: (

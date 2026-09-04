@@ -5,7 +5,7 @@ import type {
   FieldPath,
   FieldValues,
 } from "react-hook-form"
-import { FieldRow } from "~/components/field-row"
+import { DetailRow } from "~/components/detail-row"
 import {
   FormControl,
   FormDescription,
@@ -38,10 +38,10 @@ type FormRowProps<
    */
   labelClassName?: string
   /**
-   * Extra classes for the control column in `rows` layout, e.g. `sm:items-end`
+   * Extra classes for the value column in `rows` layout, e.g. `sm:items-end`
    * to keep a switch at its intrinsic width instead of stretching.
    */
-  controlClassName?: string
+  valueClassName?: string
   children: (field: ControllerRenderProps<TFieldValues, TName>) => ReactNode
 }
 
@@ -61,7 +61,7 @@ export function FormRow<
   layout = "stack",
   className,
   labelClassName,
-  controlClassName,
+  valueClassName,
   children,
   ...props
 }: FormRowProps<TFieldValues, TName, TTransformedValues>) {
@@ -71,7 +71,8 @@ export function FormRow<
       render={({ field }) => {
         if (layout === "rows") {
           return (
-            <FieldRow
+            <DetailRow
+              density="form"
               render={<FormItem />}
               label={
                 <FormLabel isRequired={isRequired} className={labelClassName}>
@@ -80,12 +81,12 @@ export function FormRow<
               }
               description={description && <FormDescription>{description}</FormDescription>}
               className={className}
-              controlClassName={controlClassName}
+              valueClassName={valueClassName}
             >
               <FormControl>{children(field)}</FormControl>
 
               <FormMessage />
-            </FieldRow>
+            </DetailRow>
           )
         }
 

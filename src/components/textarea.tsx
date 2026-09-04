@@ -9,7 +9,7 @@ function Textarea({ className, hover, focus, size, ...props }: TextareaProps) {
     <textarea
       className={cn(
         inputVariants({ hover, focus, size }),
-        "leading-normal! resize-none field-sizing-content",
+        "leading-normal resize-none field-sizing-content",
         className,
       )}
       {...props}

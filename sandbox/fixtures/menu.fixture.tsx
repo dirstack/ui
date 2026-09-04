@@ -33,7 +33,7 @@ export default (
 
       <MenuSeparator />
 
-      <MenuItem className="text-destructive">
+      <MenuItem className="text-danger">
         <TrashIcon />
         Delete
       </MenuItem>

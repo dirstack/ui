@@ -8,7 +8,7 @@ const calloutVariants = variants({
 
   variants: {
     variant: {
-      default: "bg-muted text-secondary-foreground",
+      soft: "bg-muted text-secondary-foreground",
       warning: "bg-warning-subtle border-warning/20 text-warning-foreground/90",
       success: "bg-success-subtle border-success/20 text-success-foreground/90",
       danger: "bg-danger-subtle border-danger/20 text-danger-foreground/90",
@@ -16,9 +16,20 @@ const calloutVariants = variants({
   },
 
   defaultVariants: {
-    variant: "default",
+    variant: "soft",
   },
 })
+
+/**
+ * How assistive tech should treat each tone: the two failure tones interrupt, a success
+ * confirmation is announced politely, and a plain note is neither.
+ */
+const calloutRoles = {
+  soft: "note",
+  warning: "alert",
+  success: "status",
+  danger: "alert",
+} as const
 
 type CalloutProps = Omit<ComponentProps<typeof Stack>, "prefix" | "suffix"> &
   VariantProps<typeof calloutVariants> & {
@@ -38,7 +49,7 @@ function Callout({ children, className, variant, prefix, suffix, ...props }: Cal
     <Stack
       size="sm"
       wrap={false}
-      role="alert"
+      role={calloutRoles[variant ?? "soft"]}
       className={cn(calloutVariants({ variant }), className)}
       {...props}
     >

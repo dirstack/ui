@@ -1,6 +1,6 @@
 import { useRender } from "@base-ui/react/use-render"
 import type { ReactNode } from "react"
-import { Header } from "~/components/header"
+import { SectionHeader } from "~/components/section-header"
 import { cn } from "~/lib/variants"
 
 type FormSectionProps = Omit<useRender.ComponentProps<"section">, "title"> & {
@@ -18,9 +18,9 @@ type FormSectionProps = Omit<useRender.ComponentProps<"section">, "title"> & {
 }
 
 /**
- * A block of settings: one padded container whose children (optional heading, the
- * `FieldRow`s, optional footer) stack with hairlines between them. Renders as a `<form>`
- * via `render` when the rows are fields, so the form is the only wrapper.
+ * A block of settings: one padded container whose children (optional heading, the rows,
+ * optional footer) stack with hairlines between them. Renders as a `<form>` via `render`
+ * when the rows are fields, so the form is the only wrapper.
  */
 export function FormSection({
   id,
@@ -42,7 +42,7 @@ export function FormSection({
       children: (
         <>
           {(title || actions) && (
-            <Header
+            <SectionHeader
               size="panel"
               className="py-4"
               title={title}

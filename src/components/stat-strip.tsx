@@ -26,7 +26,7 @@ const stripVariants = variants({
 
 type StatStripProps = ComponentProps<"div"> & VariantProps<typeof stripVariants>
 
-function StatStripRoot({ className, variant, ...props }: StatStripProps) {
+function StatStrip({ className, variant, ...props }: StatStripProps) {
   return (
     <div
       data-variant={variant ?? "plain"}
@@ -103,6 +103,4 @@ function StatStripItem({
   })
 }
 
-const StatStrip = Object.assign(StatStripRoot, { Item: StatStripItem })
-
-export { StatStrip }
+export { StatStrip, StatStripItem }

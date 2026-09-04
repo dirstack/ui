@@ -29,7 +29,6 @@ export default defineConfig({
     "tailwind-variants",
     "cn",
     "tailwindcss",
-    "@dirstack/utils",
   ],
   copy: [{ from: "src/styles.css", to: "dist" }],
 })

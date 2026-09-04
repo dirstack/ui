@@ -20,7 +20,7 @@ export default (
 
       <Button
         variant="ghost"
-        className={navItem({ variant: "picker" })}
+        className={navItem({ variant: "bordered" })}
         prefix={<EntityAvatar size="sm" name="Acme Inc" />}
       >
         Acme Inc

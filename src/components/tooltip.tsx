@@ -40,12 +40,22 @@ function TooltipContent({
   )
 }
 
-type TooltipProps = Omit<TooltipPrimitive.Root.Props, "children"> & {
-  children: ReactElement
-  tooltip: ReactNode
-}
+type TooltipProps = Omit<TooltipPrimitive.Root.Props, "children"> &
+  Pick<TooltipPrimitive.Positioner.Props, "side" | "align"> & {
+    children: ReactElement
+    tooltip: ReactNode
+  }
 
-function Tooltip({ children, tooltip, open, defaultOpen, onOpenChange, ...rest }: TooltipProps) {
+function Tooltip({
+  children,
+  tooltip,
+  side,
+  align,
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...rest
+}: TooltipProps) {
   if (!tooltip) {
     return children
   }
@@ -55,7 +65,7 @@ function Tooltip({ children, tooltip, open, defaultOpen, onOpenChange, ...rest }
       <TooltipTrigger render={children} />
 
       <TooltipPortal>
-        <TooltipContent>
+        <TooltipContent side={side} align={align}>
           {tooltip}
           <TooltipArrow
             className={cn(

@@ -1,10 +1,10 @@
 import type { ComponentProps } from "react"
-import { boxVariants } from "~/components/box"
+import { interactiveVariants } from "~/lib/interactive"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const inputVariants = variants({
-  extend: boxVariants,
-  base: "appearance-none min-h-0 w-full self-stretch bg-card text-foreground text-[0.8125rem]/tight break-words disabled:text-secondary-foreground/50",
+  extend: interactiveVariants,
+  base: "appearance-none min-h-0 w-full self-stretch bg-card text-foreground text-control break-words disabled:text-secondary-foreground/50",
 
   variants: {
     size: {
@@ -17,26 +17,15 @@ const inputVariants = variants({
   defaultVariants: {
     hover: false,
     focus: true,
+    bordered: true,
     size: "md",
   },
 })
 
 type InputProps = Omit<ComponentProps<"input">, "size"> & VariantProps<typeof inputVariants>
 
-/**
- * Turns off browser and password-manager assistance for identifier-style inputs
- * (names, slugs, keys).
- */
-const plainInputProps = {
-  autoComplete: "off",
-  autoCapitalize: "none",
-  autoCorrect: "off",
-  spellCheck: false,
-  "data-1p-ignore": "",
-} as const
-
 function Input({ className, hover, focus, size, ...props }: InputProps) {
   return <input className={cn(inputVariants({ hover, focus, size }), className)} {...props} />
 }
 
-export { Input, inputVariants, plainInputProps }
+export { Input, inputVariants }

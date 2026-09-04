@@ -66,7 +66,7 @@ export function CopyButton({
   const clipboard = useClipboard({ timeout: 2000 })
 
   return (
-    <Tooltip tooltip={tooltip && (clipboard.copied ? "Copied" : tooltip)}>
+    <Tooltip tooltip={tooltip && (clipboard.copied ? copiedLabel : tooltip)}>
       <Button
         type="button"
         size="sm"

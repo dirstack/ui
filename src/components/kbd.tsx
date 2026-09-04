@@ -7,16 +7,16 @@ const kbdVariants = variants({
   variants: {
     variant: {
       soft: "border-transparent bg-accent",
-      outline: "bg-background",
+      secondary: "bg-background",
     },
   },
 
   defaultVariants: {
-    variant: "outline",
+    variant: "secondary",
   },
 })
 
-type KbdProps = ComponentProps<"span"> &
+type KbdProps = ComponentProps<"kbd"> &
   VariantProps<typeof kbdVariants> & {
     meta?: boolean
     shift?: boolean
@@ -26,12 +26,12 @@ type KbdProps = ComponentProps<"span"> &
 
 export function Kbd({ children, className, variant, meta, shift, alt, ctrl, ...props }: KbdProps) {
   return (
-    <span className={cn(kbdVariants({ variant, className }))} {...props}>
+    <kbd className={cn(kbdVariants({ variant, className }))} {...props}>
       {shift && <span>⇧</span>}
       {meta && <span>⌘</span>}
       {alt && <span>⌥</span>}
       {ctrl && <span>⌃</span>}
       {children && <span>{children}</span>}
-    </span>
+    </kbd>
   )
 }

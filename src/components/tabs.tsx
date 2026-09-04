@@ -2,6 +2,7 @@
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { createContext, useContext } from "react"
+import { interactiveVariants } from "~/lib/interactive"
 import { cn, variants, type VariantProps } from "~/lib/variants"
 
 const Tabs = TabsPrimitive.Root
@@ -10,9 +11,11 @@ const tabsListVariants = variants({
   slots: {
     list: "relative inline-flex items-center text-muted-foreground",
     indicator:
-      "absolute top-1/2 left-0 z-0 h-[var(--active-tab-height)] w-[var(--active-tab-width)] -translate-y-1/2 translate-x-[var(--active-tab-left)] rounded-md transition-[translate,width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-    trigger:
-      "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-foreground data-active:text-foreground",
+      "absolute top-1/2 left-0 z-0 h-[var(--active-tab-height)] w-[var(--active-tab-width)] -translate-y-1/2 translate-x-[var(--active-tab-left)] rounded-md transition-[translate,width] duration-500 ease-out-expo",
+    trigger: cn(
+      interactiveVariants({ focus: true }),
+      "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium disabled:pointer-events-none disabled:opacity-50 hover:text-foreground data-active:text-foreground",
+    ),
   },
 
   variants: {
@@ -23,7 +26,7 @@ const tabsListVariants = variants({
       segmented: {
         list: "h-control justify-center rounded-md border bg-card p-[3px]",
         indicator: "rounded-[3px] bg-muted",
-        trigger: "rounded-[3px] px-2.5 py-[5px] text-[0.8125rem]/tight",
+        trigger: "rounded-[3px] px-2.5 py-[5px] text-control",
       },
       // Plain pills: no track, the active tab sits on a soft pill. For in-card view switchers.
       plain: {
@@ -46,9 +49,9 @@ const TabsVariantContext = createContext<TabsVariant>("segmented")
 /**
  * Sliding highlight that tracks the active tab via Base UI's --active-tab-*
  * CSS variables. Rendered automatically by TabsList, so every tab group shares
- * one pill. Duration/easing mirror the app's motion curve
- * (apps/app/src/lib/animation.ts) so the pill glides in sync with the number
- * spins and chart draws it sits beside.
+ * one pill. Duration/easing mirror the library's one motion curve — the
+ * `--ease-out-expo` token, duplicated for JS in `~/lib/animation` — so the pill
+ * glides in sync with the number spins and chart draws it sits beside.
  */
 function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
   const variant = useContext(TabsVariantContext)

@@ -119,7 +119,7 @@ function FormMessage({ className, children, ...props }: ComponentProps<"p">) {
   return (
     <p
       id={formMessageId}
-      className={cn("text-[0.8rem] font-medium text-destructive", className)}
+      className={cn("text-control font-medium text-danger", className)}
       {...props}
     >
       {body}

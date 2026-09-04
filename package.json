@@ -32,6 +32,10 @@
       "types": "./dist/lib/classes.d.ts",
       "default": "./dist/lib/classes.js"
     },
+    "./interactive": {
+      "types": "./dist/lib/interactive.d.ts",
+      "default": "./dist/lib/interactive.js"
+    },
     "./slot": {
       "types": "./dist/lib/slot.d.ts",
       "default": "./dist/lib/slot.js"
@@ -58,7 +62,6 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
-    "@dirstack/utils": "^2.1.0",
     "@hugeicons/core-free-icons": "^4.3.0",
     "@hugeicons/react": "^1.1.10",
     "@number-flow/react": "^0.6.1",

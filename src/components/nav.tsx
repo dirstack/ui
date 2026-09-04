@@ -20,20 +20,20 @@ export function NavLabel({ className, ...props }: ComponentProps<"p">) {
 const navAffixClasses = "[&>*:first-child]:ml-0 [&>*:last-child]:mr-0"
 
 /**
- * The one nav row in the app, applied to a `ghost` `md` `Button`: every sidebar and settings
- * item starts from the same width, inset and gap, and each variant is the shape on top of it.
+ * The one nav row, applied to a `ghost` `md` `Button`: every item starts from the same width,
+ * inset and gap, and each variant is the shape on top of it.
  *
- * `link` — nav links and settings tabs: muted at rest, full color on hover, and a flat darker
- * tint with dark text when active. The 16px icon sits centered in a 20px box, so labels start
- * on the same column as the workspace picker's text (10px inset + 20px avatar + 10px gap). The
- * active state keys off `data-status="active"`, which router links set on their own and plain
+ * `link` — a nav link or a settings tab: muted at rest, full color on hover, and a flat darker
+ * tint with dark text when active. The 16px icon sits centered in a 20px box, so labels start on
+ * the same column as a row that leads with a 20px avatar (10px inset + 20px avatar + 10px gap).
+ * The active state keys off `data-status="active"`, which router links set on their own and plain
  * buttons set by hand, so the active color always wins over the resting one. Its tints are flat
- * foreground over the canvas, so hover and active share the canvas hue exactly (the stone-200
- * hairline token drifts warm and reads as a different colour).
+ * foreground over the canvas, so hover and active share the canvas hue exactly.
  *
- * `picker` — the workspace picker: a bordered control on a white surface.
+ * `bordered` — a bordered row on a card surface, for a row that leads with its own visual and
+ * opens a menu.
  *
- * `account` — the account menu at the foot of the sidebar: the same row, flat.
+ * `flat` — the same row without the border or the surface.
  */
 export const navItem = variants({
   base: "w-full justify-start gap-2.5 px-2.5",
@@ -44,8 +44,8 @@ export const navItem = variants({
         "py-2 text-muted-foreground text-sm/tight hover:bg-foreground/3 hover:text-foreground [&>svg:first-child]:ml-0.5 [&>svg]:mr-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
         "data-[status=active]:bg-foreground/5 data-[status=active]:text-foreground data-[status=active]:hover:bg-foreground/5",
       ],
-      picker: [navAffixClasses, "border-border! bg-card hover:bg-card hover:border-ring!"],
-      account: navAffixClasses,
+      bordered: [navAffixClasses, "border-border bg-card hover:bg-card hover:border-ring"],
+      flat: navAffixClasses,
     },
   },
 

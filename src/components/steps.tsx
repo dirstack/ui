@@ -19,7 +19,7 @@ type StepsProps = ComponentProps<"div"> & {
  */
 export function Steps({ className, current, total, ...props }: StepsProps) {
   return (
-    <div className={cn("flex w-44 gap-1.5", className)} {...props}>
+    <div className={cn("flex gap-1.5", className)} {...props}>
       <p className="sr-only">
         Step {current} of {total}
       </p>

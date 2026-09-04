@@ -1,32 +1,69 @@
 "use client"
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import type { ComponentProps } from "react"
+import type { ComponentProps, ReactNode } from "react"
 import { Button } from "~/components/button"
-import { Modal } from "~/components/modal"
-import { Overlay } from "~/components/overlay"
+import {
+  SectionHeader,
+  SectionHeaderBody,
+  SectionHeaderDescription,
+  SectionHeaderTitle,
+} from "~/components/section-header"
 import { XIcon } from "~/lib/icons"
-import { variants, type VariantProps } from "~/lib/variants"
+import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
-const DialogPortal = DialogPrimitive.Portal
 const DialogTitle = DialogPrimitive.Title
 const DialogDescription = DialogPrimitive.Description
 
-function DialogOverlay({ ...props }: ComponentProps<typeof Overlay>) {
-  return <DialogPrimitive.Backdrop render={<Overlay {...props} />} />
+/** The dashed, blurred backdrop behind the dialog. Rendered by `DialogContent`. */
+function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) {
+  return (
+    <DialogPrimitive.Backdrop
+      className={cn(
+        "fixed inset-0 z-50 bg-dashed backdrop-blur-xs",
+        "data-open:animate-in data-closed:animate-out",
+        "data-open:fade-in-0 data-closed:fade-out-0",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 const dialogContentVariants = variants({
   base: [
-    "grid border bg-card shadow-sm rounded-xl",
+    "fixed left-1/2 z-50 grid w-[calc(100vw-2rem)] -translate-x-1/2 overflow-y-auto",
+    "border bg-card shadow-sm rounded-xl",
     "data-open:animate-in data-closed:animate-out",
     "data-open:fade-in-0 data-closed:fade-out-0",
     "data-open:slide-in-from-bottom-4 data-closed:slide-out-to-bottom-4",
   ],
 
   variants: {
+    size: {
+      xs: "max-w-xs",
+      sm: "max-w-sm",
+      md: "max-w-md",
+      lg: "max-w-lg",
+      xl: "max-w-xl",
+      "2xl": "max-w-2xl",
+      "3xl": "max-w-3xl",
+      "4xl": "max-w-4xl",
+      "5xl": "max-w-5xl",
+    },
+
+    /**
+     * Pin the dialog near the top of the viewport instead of centering it, so its height can
+     * change without the whole thing jumping. A dialog stacked on top of another one
+     * (`[[role=dialog]~&]`) sits a little lower still, so both remain visible.
+     */
+    fixed: {
+      true: "top-[10vh] max-h-[calc(90vh-2rem)] [[role=dialog]~&]:top-[15vh] [[role=dialog]~&]:max-h-[calc(85vh-2rem)]",
+      false: "top-1/2 -translate-y-1/2 max-h-[calc(100vh-2rem)]",
+    },
+
     /**
      * Drop the dialog's own padding and gap so sections can run edge to edge and draw their
      * own borders, e.g. a bordered header over a scrolling body over a bordered footer.
@@ -38,40 +75,96 @@ const dialogContentVariants = variants({
   },
 
   defaultVariants: {
+    size: "md",
+    fixed: true,
     flush: false,
   },
 })
 
-type DialogContentProps = DialogPrimitive.Popup.Props &
-  ComponentProps<typeof Modal> &
-  VariantProps<typeof dialogContentVariants>
+type DialogContentProps = Omit<DialogPrimitive.Popup.Props, "className"> &
+  VariantProps<typeof dialogContentVariants> & {
+    className?: string
+
+    /**
+     * Hide the close button in the top right corner, for a dialog that must be dismissed
+     * through one of its own actions.
+     */
+    hideClose?: boolean
+  }
 
 function DialogContent({
   className,
   children,
-  size = "md",
+  size,
   fixed,
   flush,
+  hideClose,
   ...props
 }: DialogContentProps) {
   return (
-    <DialogPortal>
+    <DialogPrimitive.Portal>
       <DialogOverlay />
 
       <DialogPrimitive.Popup
-        initialFocus={false}
-        render={<Modal size={size} fixed={fixed} />}
-        className={dialogContentVariants({ flush, className })}
+        className={dialogContentVariants({ size, fixed, flush, className })}
         {...props}
       >
         {children}
 
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-xs opacity-70 ring-offset-background hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
-          <XIcon className="size-5" />
-          <span className="sr-only">Close</span>
-        </DialogPrimitive.Close>
+        {!hideClose && (
+          <DialogPrimitive.Close
+            render={<Button variant="ghost" size="sm" aria-label="Close" prefix={<XIcon />} />}
+            className="absolute top-3 right-3"
+          />
+        )}
       </DialogPrimitive.Popup>
-    </DialogPortal>
+    </DialogPrimitive.Portal>
+  )
+}
+
+const dialogHeaderVariants = variants({
+  variants: {
+    /**
+     * Give the header its own hairline and padding, for a `flush` dialog whose body scrolls
+     * under it. The extra right padding clears the dialog's close button.
+     */
+    bordered: {
+      true: "border-b px-6 py-5 pr-14",
+    },
+  },
+})
+
+type DialogHeaderProps = Omit<ComponentProps<typeof SectionHeader>, "title" | "description"> &
+  VariantProps<typeof dialogHeaderVariants> & {
+    title: ReactNode
+    description?: ReactNode
+  }
+
+/**
+ * The standard dialog heading: a card-scale `SectionHeader` whose title and description are wired to
+ * Base UI's `DialogTitle` / `DialogDescription` for accessibility. Extra children render after
+ * them.
+ */
+function DialogHeader({
+  title,
+  description,
+  bordered,
+  className,
+  children,
+  ...props
+}: DialogHeaderProps) {
+  return (
+    <SectionHeader size="card" className={dialogHeaderVariants({ bordered, className })} {...props}>
+      <SectionHeaderBody>
+        <DialogTitle render={<SectionHeaderTitle />}>{title}</DialogTitle>
+
+        {description && (
+          <DialogDescription render={<SectionHeaderDescription />}>{description}</DialogDescription>
+        )}
+      </SectionHeaderBody>
+
+      {children}
+    </SectionHeader>
   )
 }
 
@@ -105,8 +198,7 @@ export {
   DialogContent,
   DialogDescription,
   DialogFooter,
-  DialogOverlay,
-  DialogPortal,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 }

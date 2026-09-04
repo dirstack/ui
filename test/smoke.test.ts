@@ -20,30 +20,40 @@ describe("@dirstack/ui exports", () => {
   })
 
   test("promoted component subpaths export their components", async () => {
-    const { Card } = await import("~/components/card")
-    const { Header } = await import("~/components/header")
+    const { Card, CardHeader, CardPanel } = await import("~/components/card")
+    const { SectionHeader } = await import("~/components/section-header")
     const { EmptyState } = await import("~/components/empty-state")
     const { Callout } = await import("~/components/callout")
     const { EntityAvatar } = await import("~/components/entity-avatar")
     const { Toaster } = await import("~/components/toaster")
 
-    for (const component of [Card, Header, EmptyState, Callout, EntityAvatar, Toaster]) {
+    const components = [
+      Card,
+      CardHeader,
+      CardPanel,
+      SectionHeader,
+      EmptyState,
+      Callout,
+      EntityAvatar,
+      Toaster,
+    ]
+
+    for (const component of components) {
       expect(typeof component).toBe("function")
     }
   })
 
   test("tier 1 component subpaths export their components", async () => {
     const { AnimatedNumber } = await import("~/components/animated-number")
-    const { BreakdownCard } = await import("~/components/breakdown-card")
-    const { StatStrip } = await import("~/components/stat-strip")
+    const { StatStrip, StatStripItem } = await import("~/components/stat-strip")
     const { Pagination } = await import("~/components/pagination")
     const { CopyInput } = await import("~/components/copy-input")
     const { NavButton, NavButtonSkeleton, NavIdentity } = await import("~/components/nav-button")
 
     const components = [
       AnimatedNumber,
-      BreakdownCard,
       StatStrip,
+      StatStripItem,
       Pagination,
       CopyInput,
       NavButton,
@@ -54,8 +64,6 @@ describe("@dirstack/ui exports", () => {
     for (const component of components) {
       expect(typeof component).toBe("function")
     }
-
-    expect(typeof StatStrip.Item).toBe("function")
   })
 
   test("the package ships no public icon registry", async () => {
@@ -64,10 +72,10 @@ describe("@dirstack/ui exports", () => {
 
   test("lib subpaths export their helpers", async () => {
     const { cn, variants } = await import("~/lib/variants")
-    const { boxVariants } = await import("~/components/box")
+    const { interactiveVariants } = await import("~/lib/interactive")
 
     expect(typeof cn).toBe("function")
     expect(typeof variants).toBe("function")
-    expect(typeof boxVariants).toBe("function")
+    expect(typeof interactiveVariants).toBe("function")
   })
 })

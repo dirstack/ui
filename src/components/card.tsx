@@ -1,23 +1,7 @@
 import { useRender } from "@base-ui/react/use-render"
 import type { ComponentProps } from "react"
-import { Header } from "~/components/header"
+import { SectionHeader } from "~/components/section-header"
 import { variants, cn, type VariantProps } from "~/lib/variants"
-
-const sectionVariants = variants({
-  base: "flex flex-col",
-
-  variants: {
-    gap: {
-      sm: "gap-4",
-      md: "gap-6",
-      lg: "gap-6 md:gap-8",
-    },
-  },
-
-  defaultVariants: {
-    gap: "lg",
-  },
-})
 
 /**
  * The one raised surface in the app: a white panel on the canvas, hairline border, 12px radius
@@ -50,12 +34,6 @@ const cardPanelVariants = variants({
       md: "p-4 md:p-6",
       lg: "p-6 md:p-8",
     },
-    theme: {
-      gray: "bg-background",
-    },
-    sticky: {
-      true: "sticky z-30 first:top-0 last:bottom-0",
-    },
   },
 
   defaultVariants: {
@@ -64,16 +42,16 @@ const cardPanelVariants = variants({
 })
 
 /**
- * The card heading: `Header` preset to the card scale (an `h4` title, tight spacing). Pass
+ * The card heading: `SectionHeader` preset to the card scale (an `h4` title, tight spacing). Pass
  * `size="panel"` for the smaller dashboard-panel scale.
  */
-function CardHeader(props: ComponentProps<typeof Header>) {
-  return <Header size="card" {...props} />
+function CardHeader(props: ComponentProps<typeof SectionHeader>) {
+  return <SectionHeader size="card" {...props} />
 }
 
 export type CardProps = useRender.ComponentProps<"div"> & VariantProps<typeof cardVariants>
 
-function CardRoot({ render, className, divided, ...props }: CardProps) {
+function Card({ render, className, divided, ...props }: CardProps) {
   return useRender({
     render,
     defaultTagName: "div",
@@ -84,30 +62,15 @@ function CardRoot({ render, className, divided, ...props }: CardProps) {
 export type CardPanelProps = useRender.ComponentProps<"div"> &
   VariantProps<typeof cardPanelVariants>
 
-function CardPanel({ className, render, size, theme, sticky, ...props }: CardPanelProps) {
+function CardPanel({ className, render, size, ...props }: CardPanelProps) {
   return useRender({
     render,
     defaultTagName: "div",
     props: {
-      className: cn(cardPanelVariants({ size, theme, sticky, className })),
+      className: cn(cardPanelVariants({ size, className })),
       ...props,
     },
   })
 }
 
-function CardSection({
-  className,
-  size,
-  gap,
-  ...props
-}: CardPanelProps & VariantProps<typeof sectionVariants>) {
-  return <CardPanel size={size} className={cn(sectionVariants({ gap, className }))} {...props} />
-}
-
-const Card = Object.assign(CardRoot, {
-  Header: CardHeader,
-  Panel: CardPanel,
-  Section: CardSection,
-})
-
-export { Card }
+export { Card, CardHeader, CardPanel }

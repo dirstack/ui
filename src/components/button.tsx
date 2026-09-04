@@ -1,26 +1,25 @@
 import { mergeProps } from "@base-ui/react"
 import { useRender } from "@base-ui/react/use-render"
 import { Children, isValidElement, type ReactNode } from "react"
-import { boxVariants } from "~/components/box"
 import { LoaderIcon } from "~/lib/icons"
+import { interactiveVariants } from "~/lib/interactive"
 import { slot } from "~/lib/slot"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const buttonVariants = variants({
   base: [
-    "group/button inline-flex items-center justify-center border-transparent! font-medium text-[0.8125rem]/tight text-start rounded-md overflow-clip hover:z-10 hover:border-transparent",
+    "group/button inline-flex items-center justify-center font-medium text-control text-start rounded-md overflow-clip select-none hover:z-10",
     "disabled:opacity-60 disabled:pointer-events-none aria-disabled:opacity-60 aria-disabled:pointer-events-none",
-    "has-[.animate-spin:last-child]:[&>*:not(.animate-spin)]:text-transparent select-none",
   ],
 
   variants: {
     variant: {
       primary: "text-background bg-foreground hover:opacity-90",
-      secondary: "border-border! bg-card text-secondary-foreground hover:border-ring!",
+      secondary: "bg-card text-secondary-foreground",
       soft: "bg-muted text-secondary-foreground hover:bg-muted/75 hover:text-foreground hover:outline-none",
       ghost:
         "text-secondary-foreground hover:bg-foreground/5 hover:text-foreground hover:outline-none",
-      destructive: "bg-destructive text-white hover:bg-destructive/90",
+      danger: "bg-danger text-white hover:bg-danger/90",
     },
     size: {
       sm: "px-2 py-1 gap-[0.66ch]",
@@ -40,9 +39,12 @@ const buttonVariants = variants({
 const buttonAffixClasses =
   "shrink-0 first:-ml-[0.21425em] last:-mr-[0.21425em] [svg]:my-[0.077em] [svg]:size-[1.1em]"
 
+/** Hidden while the button is pending, so only the spinner reads as content. */
+const buttonPendingClasses = "group-data-pending/button:text-transparent"
+
 export type ButtonProps = Omit<useRender.ComponentProps<"button">, "size" | "prefix"> &
   VariantProps<typeof buttonVariants> &
-  Pick<VariantProps<typeof boxVariants>, "hover" | "focus"> & {
+  Pick<VariantProps<typeof interactiveVariants>, "hover" | "focus"> & {
     /**
      * If set to `true`, the button will be rendered in the pending state.
      */
@@ -76,7 +78,11 @@ function Button({
   const props = mergeProps<"button">(
     {
       disabled: disabled || isPending,
-      className: cn(boxVariants({ hover, focus }), buttonVariants({ variant, size, className })),
+      "aria-busy": isPending || undefined,
+      className: cn(
+        interactiveVariants({ hover, focus, bordered: variant === "secondary" }),
+        buttonVariants({ variant, size, className }),
+      ),
       children: (
         <>
           {slot(prefix && isPending ? <LoaderIcon className="animate-spin" /> : prefix, {
@@ -85,10 +91,13 @@ function Button({
 
           {Children.count(children) > 0 &&
             slot(isValidElement(children) ? children : <span>{children}</span>, {
-              className: "flex-1 truncate only:text-center has-[div]:contents",
+              className: cn(
+                "flex-1 truncate only:text-center has-[div]:contents",
+                buttonPendingClasses,
+              ),
             })}
 
-          {slot(suffix, { className: buttonAffixClasses })}
+          {slot(suffix, { className: cn(buttonAffixClasses, buttonPendingClasses) })}
 
           {!prefix && !!isPending && <LoaderIcon className="absolute size-[1.25em] animate-spin" />}
         </>
@@ -97,7 +106,13 @@ function Button({
     rest,
   )
 
-  return useRender({ defaultTagName: "button", render, props })
+  // `data-pending` drives the label and suffix fade; it sits outside `mergeProps`, whose
+  // button props type has no room for a custom data attribute.
+  return useRender({
+    defaultTagName: "button",
+    render,
+    props: { "data-pending": isPending || undefined, ...props },
+  })
 }
 
 export { Button, buttonVariants }

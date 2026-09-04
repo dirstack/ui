@@ -2,7 +2,7 @@ import { Button } from "~/components/button"
 import { Stack } from "~/components/stack"
 import { ArrowRightIcon, PlusIcon } from "./icons"
 
-const variants = ["primary", "secondary", "soft", "ghost", "destructive"] as const
+const variants = ["primary", "secondary", "soft", "ghost", "danger"] as const
 const sizes = ["sm", "md", "lg"] as const
 
 export default {

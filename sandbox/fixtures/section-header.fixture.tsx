@@ -1,21 +1,21 @@
 import { Button } from "~/components/button"
 import { EntityAvatar } from "~/components/entity-avatar"
-import { Header } from "~/components/header"
+import { SectionHeader } from "~/components/section-header"
 import { Stack } from "~/components/stack"
 import { PlusIcon } from "./icons"
 
 export default {
   scales: (
     <Stack direction="column" size="lg" className="w-[36rem]">
-      <Header size="page" title="Ads" description="Manage every ad in your workspace." />
-      <Header size="card" title="Billing" description="Your plan and invoices." />
-      <Header size="panel" title="Recent activity" />
+      <SectionHeader size="page" title="Ads" description="Manage every ad in your workspace." />
+      <SectionHeader size="card" title="Billing" description="Your plan and invoices." />
+      <SectionHeader size="panel" title="Recent activity" />
     </Stack>
   ),
 
   actions: (
     <div className="w-[36rem]">
-      <Header
+      <SectionHeader
         title="Advertisers"
         description="Everyone running ads with you."
         actions={<Button prefix={<PlusIcon />}>Invite</Button>}
@@ -25,7 +25,7 @@ export default {
 
   leading: (
     <div className="w-[36rem]">
-      <Header
+      <SectionHeader
         title="Acme Inc"
         description="acme.com"
         leading={<EntityAvatar size="lg" name="Acme Inc" />}
@@ -36,7 +36,7 @@ export default {
 
   hero: (
     <div className="w-[36rem]">
-      <Header
+      <SectionHeader
         size="hero"
         alignment="center"
         title="Welcome back"

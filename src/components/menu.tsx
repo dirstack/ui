@@ -10,7 +10,6 @@ import { cn } from "~/lib/variants"
 const Menu = MenuPrimitive.Root
 const MenuTrigger = MenuPrimitive.Trigger
 const MenuGroup = MenuPrimitive.Group
-const MenuPortal = MenuPrimitive.Portal
 const MenuRadioGroup = MenuPrimitive.RadioGroup
 
 function MenuContent({
@@ -52,7 +51,7 @@ function MenuItem({
   return (
     <MenuPrimitive.Item
       className={cn(
-        "relative flex m-0 cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+        "relative flex m-0 cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
         inset && "pl-8",
         className,
       )}
@@ -70,7 +69,7 @@ function MenuCheckboxItem({
   return (
     <MenuPrimitive.CheckboxItem
       className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
         className,
       )}
       checked={checked}
@@ -90,7 +89,7 @@ function MenuRadioItem({ className, children, ...props }: MenuPrimitive.RadioIte
   return (
     <MenuPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
         className,
       )}
       {...props}
@@ -126,7 +125,7 @@ function MenuSeparator({ className, ...props }: MenuPrimitive.Separator.Props) {
   )
 }
 
-function MenuShortcut({ className, ...props }: ComponentProps<"kbd">) {
+function MenuShortcut({ className, ...props }: ComponentProps<typeof Kbd>) {
   return <Kbd className={cn("ml-auto", className)} {...props} />
 }
 
@@ -137,7 +136,6 @@ export {
   MenuGroup,
   MenuItem,
   MenuGroupLabel,
-  MenuPortal,
   MenuRadioGroup,
   MenuRadioItem,
   MenuSeparator,

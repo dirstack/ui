@@ -8,10 +8,10 @@ export default {
     </div>
   ),
 
-  picker: (
+  bordered: (
     <div className="w-64 rounded-xl border bg-card p-1">
       <NavButton
-        variant="picker"
+        variant="bordered"
         title="Acme Inc"
         avatar="https://www.google.com/s2/favicons?domain=stripe.com&sz=64"
         suffix={<ArrowRightIcon />}
@@ -21,7 +21,7 @@ export default {
 
   skeleton: (
     <div className="w-64 rounded-xl border bg-card p-1">
-      <NavButtonSkeleton variant="picker" />
+      <NavButtonSkeleton variant="bordered" />
     </div>
   ),
 

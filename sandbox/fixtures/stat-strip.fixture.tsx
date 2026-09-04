@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { StatStrip } from "~/components/stat-strip"
+import { StatStrip, StatStripItem } from "~/components/stat-strip"
 
 const usd = { style: "currency", currency: "USD" } as const
 
@@ -15,7 +15,7 @@ function TrackStrip() {
   return (
     <StatStrip variant="track" className="w-[36rem]">
       {items.map((item, index) => (
-        <StatStrip.Item
+        <StatStripItem
           key={item.label}
           label={item.label}
           value={item.value}
@@ -34,9 +34,9 @@ export default {
   // A white card of figures divided by hairlines.
   plain: (
     <StatStrip className="w-[36rem]">
-      <StatStrip.Item label="Impressions" value={128_400} />
-      <StatStrip.Item label="Clicks" value={3_210} hint="+12% vs last month" />
-      <StatStrip.Item label="Revenue" value={8_640} format={usd} />
+      <StatStripItem label="Impressions" value={128_400} />
+      <StatStripItem label="Clicks" value={3_210} hint="+12% vs last month" />
+      <StatStripItem label="Revenue" value={8_640} format={usd} />
     </StatStrip>
   ),
 

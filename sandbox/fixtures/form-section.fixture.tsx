@@ -1,6 +1,5 @@
 import { Button } from "~/components/button"
-import { FieldRow } from "~/components/field-row"
-import { FormButton } from "~/components/form-button"
+import { DetailRow } from "~/components/detail-row"
 import { FormSection } from "~/components/form-section"
 import { Input } from "~/components/input"
 import { Switch } from "~/components/switch"
@@ -15,15 +14,15 @@ export default (
           Reset
         </Button>
       }
-      footer={<FormButton>Save changes</FormButton>}
+      footer={<Button type="submit">Save changes</Button>}
     >
-      <FieldRow label="Name" description="Shown publicly on your ad units.">
+      <DetailRow density="form" label="Name" description="Shown publicly on your ad units.">
         <Input defaultValue="Acme Inc" />
-      </FieldRow>
+      </DetailRow>
 
-      <FieldRow label="Public profile" controlClassName="sm:items-end">
+      <DetailRow density="form" label="Public profile" valueClassName="sm:items-end">
         <Switch defaultChecked />
-      </FieldRow>
+      </DetailRow>
     </FormSection>
   </div>
 )

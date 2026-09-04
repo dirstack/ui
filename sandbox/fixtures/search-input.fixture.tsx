@@ -6,7 +6,7 @@ function SearchInputFixture() {
 
   return (
     <div className="w-72">
-      <SearchInput value={value} onChange={setValue} placeholder="Search ads..." />
+      <SearchInput value={value} onValueChange={setValue} placeholder="Search ads..." />
     </div>
   )
 }

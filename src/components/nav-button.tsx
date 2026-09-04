@@ -14,7 +14,7 @@ type NavButtonShellProps = Omit<ComponentProps<typeof Button>, "variant"> & {
 
 function NavButtonShell({
   leading,
-  variant = "account",
+  variant = "flat",
   children,
   className,
   ...props
@@ -38,8 +38,8 @@ type NavButtonProps = NavButtonShellProps & {
 }
 
 /**
- * Compact sidebar trigger: a 20px avatar, one line of text and whatever `suffix` the
- * caller passes (usually a chevron). Secondary text belongs in the menu it opens.
+ * Compact nav trigger: a 20px avatar, one line of text and whatever `suffix` the caller
+ * passes (usually a chevron). Secondary text belongs in the menu it opens.
  */
 function NavButton({ avatar, title, ...props }: Omit<NavButtonProps, "leading" | "children">) {
   return (
@@ -75,8 +75,7 @@ type NavIdentityProps = ComponentProps<"div"> & {
 }
 
 /**
- * Name over a muted detail line — the identity stack the workspace picker's menu items and the
- * account menu's header both use.
+ * Name over a muted detail line — the identity stack a nav menu's items and headers share.
  */
 function NavIdentity({ name, detail, className, ...props }: NavIdentityProps) {
   return (

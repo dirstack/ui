@@ -4,7 +4,7 @@ import { Stack } from "~/components/stack"
 export default {
   variants: (
     <Stack>
-      <Kbd variant="outline">K</Kbd>
+      <Kbd variant="secondary">K</Kbd>
       <Kbd variant="soft">K</Kbd>
     </Stack>
   ),

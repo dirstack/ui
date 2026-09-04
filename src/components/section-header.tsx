@@ -5,7 +5,7 @@ import { Stack } from "~/components/stack"
 import { descriptionClasses } from "~/lib/classes"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
-const headerVariants = variants({
+const sectionHeaderVariants = variants({
   base: "flex items-center w-full min-w-0",
 
   variants: {
@@ -31,7 +31,7 @@ const headerVariants = variants({
   },
 })
 
-type HeaderSize = NonNullable<VariantProps<typeof headerVariants>["size"]>
+type SectionHeaderSize = NonNullable<VariantProps<typeof sectionHeaderVariants>["size"]>
 
 /**
  * The title each header scale gets, alongside the spacing the variant above gives it: `page`
@@ -39,27 +39,27 @@ type HeaderSize = NonNullable<VariantProps<typeof headerVariants>["size"]>
  * `hero` for the centered auth and callback screens. The `as` entry keeps the heading outline
  * intact — one `<h1>` per route, `<h2>` for everything nested inside it.
  */
-const headerTitles = {
+const sectionHeaderTitles = {
   page: { size: "h3", as: "h1" },
   card: { size: "h4", as: "h2" },
   panel: { size: "h5", as: "h2" },
   hero: { size: "h2", as: "h1" },
-} as const satisfies Record<HeaderSize, { size: HeadingProps["size"]; as: string }>
+} as const satisfies Record<SectionHeaderSize, { size: HeadingProps["size"]; as: string }>
 
-const HeaderContext = createContext<{ size: HeaderSize; wrap: boolean }>({
+const SectionHeaderContext = createContext<{ size: SectionHeaderSize; wrap: boolean }>({
   size: "page",
   wrap: true,
 })
 
-type HeaderProps = Omit<useRender.ComponentProps<"div">, "title"> &
-  Omit<VariantProps<typeof headerVariants>, "wrap"> & {
+type SectionHeaderProps = Omit<useRender.ComponentProps<"div">, "title"> &
+  Omit<VariantProps<typeof sectionHeaderVariants>, "wrap"> & {
     /**
      * Keep the title block and the actions on one line instead of wrapping them.
      */
     wrap?: boolean
     /**
      * Title block. Given any of `title`/`description`/`leading`/`actions`, the header renders
-     * its own `HeaderBody` (empty if there is nothing but actions, so they still sit right);
+     * its own `SectionHeaderBody` (empty if there is nothing but actions, so they still sit right);
      * leave them all out to compose the body by hand, e.g. an entity header with dot-joined
      * meta or the dashboard greeting.
      */
@@ -75,9 +75,9 @@ type HeaderProps = Omit<useRender.ComponentProps<"div">, "title"> &
 /**
  * The one header for every surface in the app: pages, cards, list panels, dialogs and settings
  * sections. Pass `title`/`description`/`actions` for the standard block, or compose
- * `HeaderBody` + `HeaderActions` as children when the content is bespoke.
+ * `SectionHeaderBody` + `SectionHeaderActions` as children when the content is bespoke.
  */
-function Header({
+function SectionHeader({
   className,
   alignment = "left",
   size = "page",
@@ -89,25 +89,25 @@ function Header({
   children,
   render,
   ...props
-}: HeaderProps) {
+}: SectionHeaderProps) {
   const element = useRender({
     render,
     defaultTagName: "div",
     props: {
-      className: cn(headerVariants({ alignment, size, wrap, className })),
+      className: cn(sectionHeaderVariants({ alignment, size, wrap, className })),
       children: (
         <>
           {(title || description || leading || actions) && (
-            <HeaderBody
+            <SectionHeaderBody
               leading={leading}
               className={cn(alignment === "center" && "justify-center")}
             >
-              {title && <HeaderTitle>{title}</HeaderTitle>}
-              {description && <HeaderSubtitle>{description}</HeaderSubtitle>}
-            </HeaderBody>
+              {title && <SectionHeaderTitle>{title}</SectionHeaderTitle>}
+              {description && <SectionHeaderDescription>{description}</SectionHeaderDescription>}
+            </SectionHeaderBody>
           )}
 
-          {actions && <HeaderActions>{actions}</HeaderActions>}
+          {actions && <SectionHeaderActions>{actions}</SectionHeaderActions>}
 
           {children}
         </>
@@ -116,7 +116,7 @@ function Header({
     },
   })
 
-  return <HeaderContext value={{ size, wrap }}>{element}</HeaderContext>
+  return <SectionHeaderContext value={{ size, wrap }}>{element}</SectionHeaderContext>
 }
 
 /**
@@ -124,13 +124,13 @@ function Header({
  * page heading stays the route's single `<h1>` while cards and panels render `<h2>`s. Pass
  * `size`/`as` to override either one on its own.
  */
-function HeaderTitle({ size, as, ...props }: HeadingProps) {
-  const preset = headerTitles[use(HeaderContext).size]
+function SectionHeaderTitle({ size, as, ...props }: HeadingProps) {
+  const preset = sectionHeaderTitles[use(SectionHeaderContext).size]
 
   return <Heading size={size ?? preset.size} as={as ?? preset.as} {...props} />
 }
 
-type HeaderBodyProps = ComponentProps<"div"> & {
+type SectionHeaderBodyProps = ComponentProps<"div"> & {
   /**
    * Leading visual, e.g. an entity avatar.
    */
@@ -139,10 +139,10 @@ type HeaderBodyProps = ComponentProps<"div"> & {
 
 /**
  * The one title block for every header in the app (pages, cards, dialogs, settings sections):
- * an optional leading visual beside a column of `HeaderTitle` + `HeaderSubtitle`. Change the
+ * an optional leading visual beside a column of `SectionHeaderTitle` + `SectionHeaderDescription`. Change the
  * spacing here and it changes everywhere.
  */
-function HeaderBody({ leading, children, className, ...props }: HeaderBodyProps) {
+function SectionHeaderBody({ leading, children, className, ...props }: SectionHeaderBodyProps) {
   return (
     <div className={cn("flex min-w-0 flex-1 items-center gap-3", className)} {...props}>
       {leading}
@@ -154,7 +154,7 @@ function HeaderBody({ leading, children, className, ...props }: HeaderBodyProps)
 /**
  * The muted line under a title. Wraps by default; pass `truncate` for one-line entity meta.
  */
-function HeaderSubtitle({ className, ...props }: ComponentProps<"p">) {
+function SectionHeaderDescription({ className, ...props }: ComponentProps<"p">) {
   return <p className={cn(descriptionClasses, className)} {...props} />
 }
 
@@ -162,10 +162,16 @@ function HeaderSubtitle({ className, ...props }: ComponentProps<"p">) {
  * Right-aligned actions. Stops shrinking when the header is `wrap={false}`, so a long title
  * truncates instead of squeezing the buttons.
  */
-function HeaderActions({ className, ...props }: ComponentProps<typeof Stack>) {
-  const { wrap } = use(HeaderContext)
+function SectionHeaderActions({ className, ...props }: ComponentProps<typeof Stack>) {
+  const { wrap } = use(SectionHeaderContext)
 
   return <Stack className={cn("-my-0.5", !wrap && "shrink-0", className)} {...props} />
 }
 
-export { Header, HeaderTitle, HeaderBody, HeaderSubtitle, HeaderActions }
+export {
+  SectionHeader,
+  SectionHeaderTitle,
+  SectionHeaderBody,
+  SectionHeaderDescription,
+  SectionHeaderActions,
+}

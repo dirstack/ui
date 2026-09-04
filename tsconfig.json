@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "include": ["src"],
+  "include": ["src", "sandbox"],
   "exclude": ["node_modules", "dist", "**/*.test.*", "**/*.spec.*"],
   "compilerOptions": {
     "declaration": true,

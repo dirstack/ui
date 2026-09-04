@@ -1,22 +1,22 @@
-import { Card } from "~/components/card"
-import { Header } from "~/components/header"
+import { Card, CardPanel } from "~/components/card"
 import { Page } from "~/components/page"
+import { SectionHeader } from "~/components/section-header"
 
 export default {
   default: (
     <Page>
-      <Header title="Dashboard" description="An overview of your workspace." />
+      <SectionHeader title="Dashboard" description="An overview of your workspace." />
       <Card>
-        <Card.Panel>Full-width page content.</Card.Panel>
+        <CardPanel>Full-width page content.</CardPanel>
       </Card>
     </Page>
   ),
 
   narrow: (
     <Page width="narrow">
-      <Header title="Settings" description="A single, narrow column." />
+      <SectionHeader title="Settings" description="A single, narrow column." />
       <Card>
-        <Card.Panel>Narrow page content, capped at a readable width.</Card.Panel>
+        <CardPanel>Narrow page content, capped at a readable width.</CardPanel>
       </Card>
     </Page>
   ),

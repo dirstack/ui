@@ -27,7 +27,7 @@ function FormRowFixture({ layout }: { layout: "stack" | "rows" }) {
           layout={layout}
           label="Public profile"
           description="List this workspace in the directory."
-          controlClassName="sm:items-end"
+          valueClassName="sm:items-end"
         >
           {field => <Switch checked={field.value} onCheckedChange={field.onChange} />}
         </FormRow>

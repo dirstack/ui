@@ -6,16 +6,13 @@ import { ResponsiveContainer, Tooltip } from "recharts"
 import type { TooltipContentProps } from "recharts"
 import { cn } from "~/lib/variants"
 
-// Format: { THEME_NAME: CSS_SELECTOR }
-const THEMES = { light: "", dark: ".dark" } as const
-
 export type ChartConfig = {
   [k in string]: {
     label?: ReactNode
     icon?: ComponentType
   } & (
     | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
+    | { color?: never; theme: { light: string; dark: string } }
   )
 }
 
@@ -65,6 +62,10 @@ function ChartContainer({
   )
 }
 
+/**
+ * Publishes each series color as a `--color-<key>` custom property on the chart. One block, no
+ * theme selectors: a `theme` entry becomes a `light-dark()` pair, resolved by `color-scheme`.
+ */
 function ChartStyle({ id, config }: { id: string; config: ChartConfig }) {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color)
 
@@ -75,20 +76,17 @@ function ChartStyle({ id, config }: { id: string; config: ChartConfig }) {
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+        __html: `[data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    const color = itemConfig.theme
+      ? `light-dark(${itemConfig.theme.light}, ${itemConfig.theme.dark})`
+      : itemConfig.color
+
+    return `  --color-${key}: ${color};`
   })
   .join("\n")}
-}
-`,
-          )
-          .join("\n"),
+}`,
       }}
     />
   )
@@ -96,7 +94,8 @@ ${colorConfig
 
 const ChartTooltip = Tooltip
 
-type ChartTooltipContentProps = TooltipContentProps &
+// recharts injects the payload props at render time, so they are optional to the caller.
+type ChartTooltipContentProps = Partial<TooltipContentProps> &
   ComponentProps<"div"> & {
     hideLabel?: boolean
     hideIndicator?: boolean
@@ -157,7 +156,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        "grid min-w-[8rem] items-start gap-1.5 rounded-md border bg-popover px-2.5 py-1.5 text-popover-foreground text-xs shadow-md",
         className,
       )}
     >
@@ -217,7 +216,7 @@ function ChartTooltipContent({
                       </span>
                     </div>
                     {item.value != null && (
-                      <span className="font-mono font-medium tabular-nums text-foreground">
+                      <span className="font-display font-medium tabular-nums">
                         {item.value.toLocaleString()}
                       </span>
                     )}

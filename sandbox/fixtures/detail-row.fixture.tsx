@@ -23,7 +23,7 @@ export default {
         <Switch defaultChecked />
       </DetailRow>
       <DetailRow density="form" label="Danger zone" description="Delete this workspace for good.">
-        <Button variant="destructive" size="sm">
+        <Button variant="danger" size="sm">
           Delete
         </Button>
       </DetailRow>
