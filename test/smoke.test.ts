@@ -19,12 +19,21 @@ describe("@dirstack/ui exports", () => {
     }
   })
 
-  test("icon registry exports icon components", async () => {
-    const icons = await import("~/components/icons")
+  test("promoted component subpaths export their components", async () => {
+    const { Card } = await import("~/components/card")
+    const { Header } = await import("~/components/header")
+    const { EmptyState } = await import("~/components/empty-state")
+    const { Callout } = await import("~/components/callout")
+    const { EntityAvatar } = await import("~/components/entity-avatar")
+    const { Toaster } = await import("~/components/toaster")
 
-    expect(typeof icons.CheckIcon).toBe("function")
-    expect(typeof icons.TrashIcon).toBe("function")
-    expect(typeof icons.PlusIcon).toBe("function")
+    for (const component of [Card, Header, EmptyState, Callout, EntityAvatar, Toaster]) {
+      expect(typeof component).toBe("function")
+    }
+  })
+
+  test("the package ships no public icon registry", async () => {
+    expect(import("~/components/icons")).rejects.toThrow()
   })
 
   test("lib subpaths export their helpers", async () => {

@@ -2,7 +2,7 @@ import { mergeProps } from "@base-ui/react"
 import { useRender } from "@base-ui/react/use-render"
 import { Children, isValidElement, type ReactNode } from "react"
 import { boxVariants } from "~/components/box"
-import { LoaderIcon } from "~/components/icons"
+import { LoaderIcon } from "~/lib/icons"
 import { slot } from "~/lib/slot"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 

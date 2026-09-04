@@ -1,5 +1,4 @@
 import { Button } from "~/components/button"
-import { CopyIcon, PencilIcon, TrashIcon } from "~/components/icons"
 import {
   Menu,
   MenuContent,
@@ -10,6 +9,7 @@ import {
   MenuShortcut,
   MenuTrigger,
 } from "~/components/menu"
+import { CopyIcon, PencilIcon, TrashIcon } from "./icons"
 
 export default (
   <Menu>

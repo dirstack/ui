@@ -2,9 +2,9 @@
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import type { ComponentProps } from "react"
-import { CheckIcon, CircleIcon } from "~/components/icons"
 import { Kbd } from "~/components/kbd"
 import { eyebrowClasses, popoverAnimationClasses } from "~/lib/classes"
+import { CheckIcon, CircleIcon } from "~/lib/icons"
 import { cn } from "~/lib/variants"
 
 const Menu = MenuPrimitive.Root

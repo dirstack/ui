@@ -1,9 +1,9 @@
 "use client"
 
 import { Select as SelectPrimitive } from "@base-ui/react/select"
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronsUpDownIcon } from "~/components/icons"
 import { inputVariants } from "~/components/input"
 import { popoverAnimationClasses } from "~/lib/classes"
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronsUpDownIcon } from "~/lib/icons"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const Select = SelectPrimitive.Root

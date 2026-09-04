@@ -3,9 +3,9 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import type { ComponentProps } from "react"
 import { Button } from "~/components/button"
-import { XIcon } from "~/components/icons"
 import { Modal } from "~/components/modal"
 import { Overlay } from "~/components/overlay"
+import { XIcon } from "~/lib/icons"
 import { variants, type VariantProps } from "~/lib/variants"
 
 const Dialog = DialogPrimitive.Root

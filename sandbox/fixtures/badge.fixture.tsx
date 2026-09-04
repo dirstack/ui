@@ -1,6 +1,6 @@
 import { Badge } from "~/components/badge"
-import { CheckIcon, SparklesIcon } from "~/components/icons"
 import { Stack } from "~/components/stack"
+import { CheckIcon, SparklesIcon } from "./icons"
 
 const variants = ["secondary", "soft", "success", "warning", "danger"] as const
 const sizes = ["sm", "md", "lg"] as const

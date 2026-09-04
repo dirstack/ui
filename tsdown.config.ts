@@ -24,9 +24,11 @@ export default defineConfig({
     /^@hugeicons\//,
     "react-hook-form",
     "recharts",
+    "sonner",
     "tailwind-variants",
     "cn",
     "tailwindcss",
+    "@dirstack/utils",
   ],
   copy: [{ from: "src/styles.css", to: "dist" }],
 })
