@@ -43,7 +43,4 @@ jobs:
       - name: Release and publish package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Temporary: one-time token to bootstrap the first publish so @dirstack/ui
-          # exists on npm; remove once its Trusted Publisher (OIDC) is configured.
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: bunx semantic-release --extends ./release.json
