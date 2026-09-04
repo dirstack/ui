@@ -34,11 +34,15 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
 
 const dialogContentVariants = variants({
   base: [
-    "fixed left-1/2 z-50 grid w-[calc(100vw-2rem)] -translate-x-1/2 overflow-y-auto",
-    "border bg-card shadow-sm rounded-xl",
+    "fixed z-50 grid overflow-y-auto border bg-card shadow-sm",
+    // Under `sm` the dialog is a bottom sheet: full width, pinned to the bottom edge,
+    // padded past the home indicator.
+    "max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[calc(100dvh-3rem)] max-sm:rounded-t-2xl max-sm:border-b-0",
+    "sm:left-1/2 sm:w-[calc(100vw-2rem)] sm:-translate-x-1/2 sm:rounded-xl",
     "data-open:animate-in data-closed:animate-out",
     "data-open:fade-in-0 data-closed:fade-out-0",
     "data-open:slide-in-from-bottom-4 data-closed:slide-out-to-bottom-4",
+    "max-sm:data-open:slide-in-from-bottom-8 max-sm:data-closed:slide-out-to-bottom-8",
   ],
 
   variants: {
@@ -60,8 +64,8 @@ const dialogContentVariants = variants({
      * (`[[role=dialog]~&]`) sits a little lower still, so both remain visible.
      */
     fixed: {
-      true: "top-[10vh] max-h-[calc(90vh-2rem)] [[role=dialog]~&]:top-[15vh] [[role=dialog]~&]:max-h-[calc(85vh-2rem)]",
-      false: "top-1/2 -translate-y-1/2 max-h-[calc(100vh-2rem)]",
+      true: "sm:top-[10vh] sm:max-h-[calc(90vh-2rem)] sm:[[role=dialog]~&]:top-[15vh] sm:[[role=dialog]~&]:max-h-[calc(85vh-2rem)]",
+      false: "sm:top-1/2 sm:-translate-y-1/2 sm:max-h-[calc(100vh-2rem)]",
     },
 
     /**
@@ -69,8 +73,8 @@ const dialogContentVariants = variants({
      * own borders, e.g. a bordered header over a scrolling body over a bordered footer.
      */
     flush: {
-      true: "gap-0 p-0",
-      false: "gap-6 p-6",
+      true: "gap-0 p-0 max-sm:pb-[env(safe-area-inset-bottom)]",
+      false: "gap-6 p-6 max-sm:pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
     },
   },
 

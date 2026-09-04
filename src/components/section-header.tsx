@@ -14,8 +14,8 @@ const sectionHeaderVariants = variants({
       center: "justify-center text-center",
     },
     size: {
-      page: "gap-y-3 gap-x-6 lg:gap-x-12",
-      card: "gap-y-2 gap-x-6",
+      page: "gap-y-3 gap-x-6 max-sm:flex-col max-sm:items-stretch lg:gap-x-12",
+      card: "gap-y-2 gap-x-6 max-sm:flex-col max-sm:items-stretch",
       panel: "gap-y-2 gap-x-6",
       hero: "gap-y-3 gap-x-6 lg:gap-x-12",
     },
@@ -163,9 +163,20 @@ function SectionHeaderDescription({ className, ...props }: ComponentProps<"p">) 
  * truncates instead of squeezing the buttons.
  */
 function SectionHeaderActions({ className, ...props }: ComponentProps<typeof Stack>) {
-  const { wrap } = use(SectionHeaderContext)
+  const { size, wrap } = use(SectionHeaderContext)
 
-  return <Stack className={cn("-my-0.5", !wrap && "shrink-0", className)} {...props} />
+  return (
+    <Stack
+      className={cn(
+        "-my-0.5",
+        !wrap && "shrink-0",
+        // Stacked under a page title, the trailing (primary) action leads the row.
+        size === "page" && "max-sm:flex-row-reverse max-sm:justify-end",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export {

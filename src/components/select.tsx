@@ -121,7 +121,7 @@ function SelectItem({ className, children, label, ...props }: SelectPrimitive.It
     <SelectPrimitive.Item
       label={label ?? (typeof children === "string" ? children : undefined)}
       className={cn(
-        `relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 ${controlTextClasses} text-secondary-foreground outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50`,
+        `relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 pointer-coarse:min-h-10 ${controlTextClasses} text-secondary-foreground outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50`,
         className,
       )}
       {...props}

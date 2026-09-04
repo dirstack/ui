@@ -12,6 +12,7 @@ export function Toaster({ className, ...props }: ComponentProps<typeof Sonner>) 
     <Sonner
       className="pointer-events-auto"
       offset={16}
+      mobileOffset={{ bottom: "calc(16px + env(safe-area-inset-bottom))", left: 16, right: 16 }}
       toastOptions={{
         unstyled: true,
         classNames: {

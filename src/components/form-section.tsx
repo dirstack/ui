@@ -44,7 +44,7 @@ export function FormSection({
           {(title || actions) && (
             <SectionHeader
               size="panel"
-              className="py-4"
+              className="py-4 max-sm:flex-col max-sm:items-stretch"
               title={title}
               description={description}
               actions={actions}

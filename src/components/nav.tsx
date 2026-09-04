@@ -41,7 +41,7 @@ export const navItem = variants({
   variants: {
     variant: {
       link: [
-        "py-2 text-muted-foreground text-sm/tight hover:bg-foreground/3 hover:text-foreground [&>svg:first-child]:ml-0.5 [&>svg]:mr-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
+        "py-2 pointer-coarse:min-h-11 text-muted-foreground text-sm/tight hover:bg-foreground/3 hover:text-foreground [&>svg:first-child]:ml-0.5 [&>svg]:mr-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
         "data-[status=active]:bg-foreground/5 data-[status=active]:text-foreground data-[status=active]:hover:bg-foreground/5",
       ],
       bordered: [navAffixClasses, "border-border bg-card hover:bg-card hover:border-ring"],

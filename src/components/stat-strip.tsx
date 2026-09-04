@@ -86,16 +86,16 @@ function StatStripItem({
       ),
       children: (
         <>
-          <p className="truncate text-muted-foreground text-sm">{label}</p>
+          <p className="text-muted-foreground text-sm sm:truncate">{label}</p>
 
           <p
             data-value
-            className="mt-0.5 truncate font-display font-semibold text-2xl tabular-nums"
+            className="mt-0.5 truncate font-display font-semibold text-xl tabular-nums sm:text-2xl"
           >
             <AnimatedNumber value={value} format={format} />
           </p>
 
-          {hint && <p className="truncate text-muted-foreground text-xs">{hint}</p>}
+          {hint && <p className="text-muted-foreground text-xs sm:truncate">{hint}</p>}
         </>
       ),
       ...props,
