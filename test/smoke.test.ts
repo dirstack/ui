@@ -32,6 +32,32 @@ describe("@dirstack/ui exports", () => {
     }
   })
 
+  test("tier 1 component subpaths export their components", async () => {
+    const { AnimatedNumber } = await import("~/components/animated-number")
+    const { BreakdownCard } = await import("~/components/breakdown-card")
+    const { StatStrip } = await import("~/components/stat-strip")
+    const { Pagination } = await import("~/components/pagination")
+    const { CopyInput } = await import("~/components/copy-input")
+    const { NavButton, NavButtonSkeleton, NavIdentity } = await import("~/components/nav-button")
+
+    const components = [
+      AnimatedNumber,
+      BreakdownCard,
+      StatStrip,
+      Pagination,
+      CopyInput,
+      NavButton,
+      NavButtonSkeleton,
+      NavIdentity,
+    ]
+
+    for (const component of components) {
+      expect(typeof component).toBe("function")
+    }
+
+    expect(typeof StatStrip.Item).toBe("function")
+  })
+
   test("the package ships no public icon registry", async () => {
     expect(import("~/components/icons")).rejects.toThrow()
   })

@@ -1,5 +1,7 @@
 import {
   ArrowDown01Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
   ArrowUp01Icon,
   Cancel01Icon,
   CancelCircleIcon,
@@ -39,6 +41,8 @@ function icon(def: IconSvgElement, name: string): IconComponent {
 
 export const CheckIcon = icon(Tick02Icon, "CheckIcon")
 export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon")
+export const ChevronLeftIcon = icon(ArrowLeft01Icon, "ChevronLeftIcon")
+export const ChevronRightIcon = icon(ArrowRight01Icon, "ChevronRightIcon")
 export const ChevronUpIcon = icon(ArrowUp01Icon, "ChevronUpIcon")
 export const ChevronsUpDownIcon = icon(UnfoldMoreIcon, "ChevronsUpDownIcon")
 export const CircleCheckIcon = icon(CheckmarkCircle02Icon, "CircleCheckIcon")

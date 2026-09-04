@@ -61,6 +61,7 @@
     "@dirstack/utils": "^2.1.0",
     "@hugeicons/core-free-icons": "^4.3.0",
     "@hugeicons/react": "^1.1.10",
+    "@number-flow/react": "^0.6.1",
     "cn": "^0.2.4",
     "recharts": "^3.9.2",
     "sonner": "^2.0.8",

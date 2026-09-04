@@ -22,6 +22,7 @@ export default defineConfig({
     /^react-dom($|\/)/,
     /^@base-ui\/react($|\/)/,
     /^@hugeicons\//,
+    /^@number-flow\/react($|\/)/,
     "react-hook-form",
     "recharts",
     "sonner",
