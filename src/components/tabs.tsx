@@ -2,6 +2,7 @@
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { createContext, useContext } from "react"
+import { controlTextClasses } from "~/lib/classes"
 import { interactiveVariants } from "~/lib/interactive"
 import { cn, variants, type VariantProps } from "~/lib/variants"
 
@@ -26,7 +27,7 @@ const tabsListVariants = variants({
       segmented: {
         list: "h-control justify-center rounded-md border bg-card p-[3px]",
         indicator: "rounded-[3px] bg-muted",
-        trigger: "rounded-[3px] px-2.5 py-[5px] text-control",
+        trigger: `rounded-[3px] px-2.5 py-[5px] ${controlTextClasses}`,
       },
       // Plain pills: no track, the active tab sits on a soft pill. For in-card view switchers.
       plain: {

@@ -1,6 +1,7 @@
 import { mergeProps } from "@base-ui/react"
 import { useRender } from "@base-ui/react/use-render"
 import { Children, isValidElement, type ReactNode } from "react"
+import { controlTextClasses } from "~/lib/classes"
 import { LoaderIcon } from "~/lib/icons"
 import { interactiveVariants } from "~/lib/interactive"
 import { slot } from "~/lib/slot"
@@ -8,7 +9,7 @@ import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const buttonVariants = variants({
   base: [
-    "group/button inline-flex items-center justify-center font-medium text-control text-start rounded-md overflow-clip select-none hover:z-10",
+    `group/button inline-flex items-center justify-center font-medium ${controlTextClasses} text-start rounded-md overflow-clip select-none hover:z-10`,
     "disabled:opacity-60 disabled:pointer-events-none aria-disabled:opacity-60 aria-disabled:pointer-events-none",
   ],
 

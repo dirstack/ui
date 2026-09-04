@@ -12,7 +12,7 @@ import {
 } from "react-hook-form"
 import { Label } from "~/components/label"
 import { Stack } from "~/components/stack"
-import { descriptionClasses } from "~/lib/classes"
+import { controlTextClasses, descriptionClasses } from "~/lib/classes"
 import { cn } from "~/lib/variants"
 
 const Form = FormProvider
@@ -119,7 +119,7 @@ function FormMessage({ className, children, ...props }: ComponentProps<"p">) {
   return (
     <p
       id={formMessageId}
-      className={cn("text-control font-medium text-danger", className)}
+      className={cn(`${controlTextClasses} font-medium text-danger`, className)}
       {...props}
     >
       {body}

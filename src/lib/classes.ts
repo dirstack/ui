@@ -34,3 +34,15 @@ export const eyebrowClasses = "text-[0.6875rem]/tight font-medium text-muted-for
  * size the settings rows already use, so a form reads the same in either layout.
  */
 export const descriptionClasses = "text-pretty text-muted-foreground text-sm"
+
+/**
+ * The default control font size + line height (buttons, inputs, selects, menu items, tabs,
+ * toasts). Written as an arbitrary `length:` font-size plus a paired `leading-*` rather than
+ * a `text-control` theme utility on purpose: a *named* custom text size is invisible to the
+ * class-merge engines (`cn` and tailwind-variants' twMerge), which fall back to treating
+ * `text-control` as a text COLOR and drop it the moment a variant adds its own
+ * `text-secondary-foreground`/`text-background`/... , leaving the control to inherit the
+ * page's 16px. The `length:` hint keeps it classified as a font-size so it survives the merge.
+ */
+export const controlTextClasses =
+  "text-(length:--text-control) leading-(--text-control--line-height)"

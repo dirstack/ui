@@ -2,7 +2,7 @@
 
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { inputVariants } from "~/components/input"
-import { popoverAnimationClasses } from "~/lib/classes"
+import { controlTextClasses, popoverAnimationClasses } from "~/lib/classes"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon, ChevronsUpDownIcon } from "~/lib/icons"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
@@ -121,7 +121,7 @@ function SelectItem({ className, children, label, ...props }: SelectPrimitive.It
     <SelectPrimitive.Item
       label={label ?? (typeof children === "string" ? children : undefined)}
       className={cn(
-        "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-control text-secondary-foreground outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        `relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 ${controlTextClasses} text-secondary-foreground outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50`,
         className,
       )}
       {...props}

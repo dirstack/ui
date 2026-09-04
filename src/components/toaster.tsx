@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react"
 import { Toaster as Sonner } from "sonner"
+import { controlTextClasses } from "~/lib/classes"
 import { CircleCheckIcon, CircleHelpIcon, CircleXIcon, LoaderIcon } from "~/lib/icons"
 import { cn } from "~/lib/variants"
 
@@ -21,7 +22,7 @@ export function Toaster({ className, ...props }: ComponentProps<typeof Sonner>) 
            * only, and never gets cancelled here.
            */
           toast: cn(
-            "flex items-start gap-2 p-4 text-control font-medium rounded-lg shadow-sm",
+            `flex items-start gap-2 p-4 ${controlTextClasses} font-medium rounded-lg shadow-sm`,
             className,
           ),
           default: "bg-background border border-border text-foreground",

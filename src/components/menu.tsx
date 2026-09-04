@@ -3,7 +3,7 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import type { ComponentProps } from "react"
 import { Kbd } from "~/components/kbd"
-import { eyebrowClasses, popoverAnimationClasses } from "~/lib/classes"
+import { controlTextClasses, eyebrowClasses, popoverAnimationClasses } from "~/lib/classes"
 import { CheckIcon, CircleIcon } from "~/lib/icons"
 import { cn } from "~/lib/variants"
 
@@ -51,7 +51,7 @@ function MenuItem({
   return (
     <MenuPrimitive.Item
       className={cn(
-        "relative flex m-0 cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+        `relative flex m-0 cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 ${controlTextClasses} outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0`,
         inset && "pl-8",
         className,
       )}
@@ -69,7 +69,7 @@ function MenuCheckboxItem({
   return (
     <MenuPrimitive.CheckboxItem
       className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        `relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 ${controlTextClasses} outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50`,
         className,
       )}
       checked={checked}
@@ -89,7 +89,7 @@ function MenuRadioItem({ className, children, ...props }: MenuPrimitive.RadioIte
   return (
     <MenuPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-control outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        `relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 ${controlTextClasses} outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50`,
         className,
       )}
       {...props}
