@@ -25,6 +25,16 @@ export function Example() {
 
 The shared helpers live at fixed subpaths: `@dirstack/ui/variants` (`cn`, `variants`, `VariantProps`), `@dirstack/ui/classes` (shared class strings), `@dirstack/ui/slot`, `@dirstack/ui/interactive` (`interactiveVariants`), and `@dirstack/ui/animation` (`ANIMATION_DURATION`, `ANIMATION_EASING` — the shared motion timing, for syncing your own transitions with the library's).
 
+## Components
+
+Every file in `src/components` is its own subpath (`@dirstack/ui/<name>`):
+
+- **Layout**: `page`, `stack`, `heading`, `section-header`, `card`, `detail-row`, `steps`, `nav`, `nav-button`
+- **Forms**: `form`, `form-section`, `form-row`, `label`, `input`, `number-input`, `search-input`, `textarea`, `select`, `switch`, `copy-input`
+- **Actions & overlays**: `button`, `copy-button`, `menu`, `popover`, `dialog`, `tooltip`, `tabs`, `toaster`, `kbd`
+- **Display & feedback**: `badge`, `callout`, `empty-state`, `skeleton`, `avatar`, `entity-avatar`, `pagination`
+- **Dashboard**: `animated-number`, `chart`, `stat-strip`, `bar-list` (ranked share bars, `BarList.Row` / `BarList.Skeleton`), `breakdown-card` (titled panel with optional tabs and footer), `view-tabs` (tab switcher bound to a `?view=` param), `theme` (`useTheme` + `ThemeSelect`)
+
 ## Styles
 
 The package ships its own theme. Import it once in your Tailwind v4 entry, after `@import "tailwindcss"`:
