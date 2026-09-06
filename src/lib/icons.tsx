@@ -3,6 +3,7 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   ArrowUp01Icon,
+  ArrowUpRight01Icon,
   Cancel01Icon,
   CancelCircleIcon,
   CheckmarkCircle02Icon,
@@ -39,6 +40,7 @@ function icon(def: IconSvgElement, name: string): IconComponent {
   return Icon
 }
 
+export const ArrowUpRightIcon = icon(ArrowUpRight01Icon, "ArrowUpRightIcon")
 export const CheckIcon = icon(Tick02Icon, "CheckIcon")
 export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon")
 export const ChevronLeftIcon = icon(ArrowLeft01Icon, "ChevronLeftIcon")

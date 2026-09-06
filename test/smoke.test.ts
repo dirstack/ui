@@ -68,8 +68,9 @@ describe("@dirstack/ui exports", () => {
 
   test("dashboard primitive subpaths export their components", async () => {
     const { ThemeSelect, useTheme } = await import("~/components/theme")
+    const { BarList } = await import("~/components/bar-list")
 
-    for (const component of [ThemeSelect, useTheme]) {
+    for (const component of [ThemeSelect, useTheme, BarList, BarList.Row, BarList.Skeleton]) {
       expect(typeof component).toBe("function")
     }
   })
