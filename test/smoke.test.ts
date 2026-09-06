@@ -70,6 +70,7 @@ describe("@dirstack/ui exports", () => {
     const { ThemeSelect, useTheme } = await import("~/components/theme")
     const { BarList } = await import("~/components/bar-list")
     const { BreakdownCard } = await import("~/components/breakdown-card")
+    const { ViewTabs } = await import("~/components/view-tabs")
 
     const components = [
       ThemeSelect,
@@ -78,6 +79,7 @@ describe("@dirstack/ui exports", () => {
       BarList.Row,
       BarList.Skeleton,
       BreakdownCard,
+      ViewTabs,
     ]
 
     for (const component of components) {
