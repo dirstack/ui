@@ -23,7 +23,7 @@ export function Example() {
 }
 ```
 
-The shared helpers live at fixed subpaths: `@dirstack/ui/variants` (`cn`, `variants`, `VariantProps`), `@dirstack/ui/classes` (shared class strings), `@dirstack/ui/slot`, and `@dirstack/ui/interactive` (`interactiveVariants`).
+The shared helpers live at fixed subpaths: `@dirstack/ui/variants` (`cn`, `variants`, `VariantProps`), `@dirstack/ui/classes` (shared class strings), `@dirstack/ui/slot`, `@dirstack/ui/interactive` (`interactiveVariants`), and `@dirstack/ui/animation` (`ANIMATION_DURATION`, `ANIMATION_EASING` — the shared motion timing, for syncing your own transitions with the library's).
 
 ## Styles
 

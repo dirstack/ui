@@ -73,9 +73,12 @@ describe("@dirstack/ui exports", () => {
   test("lib subpaths export their helpers", async () => {
     const { cn, variants } = await import("~/lib/variants")
     const { interactiveVariants } = await import("~/lib/interactive")
+    const { ANIMATION_DURATION, ANIMATION_EASING } = await import("~/lib/animation")
 
     expect(typeof cn).toBe("function")
     expect(typeof variants).toBe("function")
     expect(typeof interactiveVariants).toBe("function")
+    expect(typeof ANIMATION_DURATION).toBe("number")
+    expect(typeof ANIMATION_EASING).toBe("string")
   })
 })
