@@ -38,6 +38,12 @@ That stylesheet carries the full design-token set (`--color-*` mirroring the sha
 
 Every color is a `light-dark()` pair driven by `color-scheme`: left alone it follows the OS, and `data-theme="dark"` or `data-theme="light"` on `<html>` forces one. The theme expects the consumer to load the "Inter Variable" font; without it, type falls back to the system stack.
 
+`@dirstack/ui/theme` manages that attribute for you: `useTheme()` returns `[theme, setTheme]` (`"system" | "light" | "dark"`), persists the choice in `localStorage.theme`, keeps tabs in sync, and `ThemeSelect` is a ready-made segmented System / Light / Dark control. The hook applies the stored theme once it mounts; to avoid a flash of the wrong scheme, apply it before first paint with this inline script in `<head>`:
+
+```html
+<script>try{var t=localStorage.theme;if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+```
+
 Override any token in your own CSS to re-theme:
 
 ```css

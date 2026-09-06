@@ -66,6 +66,14 @@ describe("@dirstack/ui exports", () => {
     }
   })
 
+  test("dashboard primitive subpaths export their components", async () => {
+    const { ThemeSelect, useTheme } = await import("~/components/theme")
+
+    for (const component of [ThemeSelect, useTheme]) {
+      expect(typeof component).toBe("function")
+    }
+  })
+
   test("the package ships no public icon registry", async () => {
     expect(import("~/components/icons")).rejects.toThrow()
   })
