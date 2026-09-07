@@ -32,7 +32,7 @@ Every file in `src/components` is its own subpath (`@dirstack/ui/<name>`):
 - **Layout**: `page`, `stack`, `heading`, `section-header`, `card`, `detail-row`, `steps`, `nav`, `nav-button`
 - **Forms**: `form`, `form-section`, `form-row`, `label`, `input`, `number-input`, `search-input`, `textarea`, `select`, `switch`, `copy-input`
 - **Actions & overlays**: `button`, `copy-button`, `menu`, `popover`, `dialog`, `tooltip`, `tabs`, `toaster`, `kbd`
-- **Display & feedback**: `badge`, `callout`, `empty-state`, `skeleton`, `avatar`, `entity-avatar`, `pagination`
+- **Display & feedback**: `badge`, `callout`, `empty-state`, `skeleton`, `ping` (status dot with optional pulse), `avatar`, `entity-avatar`, `pagination`
 - **Dashboard**: `animated-number`, `chart`, `stat-strip`, `bar-list` (ranked share bars, `BarList.Row` / `BarList.Skeleton`), `breakdown-card` (titled panel with optional tabs and footer), `view-tabs` (tab switcher bound to a `?view=` param), `theme` (`useTheme` + `ThemeSelect`)
 
 ## Styles
