@@ -1,6 +1,6 @@
 import { useRender } from "@base-ui/react/use-render"
 import type { Format } from "@number-flow/react"
-import type { ComponentProps } from "react"
+import { type ComponentProps, isValidElement, type ReactNode } from "react"
 import { AnimatedNumber } from "~/components/animated-number"
 import { cardSurfaceClasses } from "~/components/card"
 import { cn, variants, type VariantProps } from "~/lib/variants"
@@ -38,7 +38,11 @@ function StatStrip({ className, variant, ...props }: StatStripProps) {
 
 type StatStripItemProps = Omit<useRender.ComponentProps<"div">, "children"> & {
   label: string
-  value: string | number
+  /**
+   * A number (or a string with a `format`) spins through `AnimatedNumber`; any other node,
+   * e.g. two `AnimatedNumber`s composing "1m 38s", renders as is.
+   */
+  value: ReactNode
   format?: Format
   hint?: string
   /**
@@ -94,7 +98,11 @@ function StatStripItem({
             data-value
             className="mt-0.5 truncate font-display font-semibold text-xl leading-8 tabular-nums sm:text-2xl sm:leading-9"
           >
-            <AnimatedNumber value={value} format={format} />
+            {isValidElement(value) || (typeof value !== "number" && typeof value !== "string") ? (
+              value
+            ) : (
+              <AnimatedNumber value={value} format={format} />
+            )}
           </p>
 
           {hint && <p className="text-muted-foreground text-xs sm:truncate">{hint}</p>}
