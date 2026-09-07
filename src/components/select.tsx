@@ -99,7 +99,10 @@ function SelectContent({
           {...props}
         >
           <SelectScrollUpButton className={selectScrollButtonVariants({ position: "top" })} />
-          <SelectPrimitive.List className="p-1">{children}</SelectPrimitive.List>
+          {/* The list is the scroller (not the popup), so the scroll arrows can overlay it. */}
+          <SelectPrimitive.List className="max-h-(--available-height) overflow-y-auto p-1">
+            {children}
+          </SelectPrimitive.List>
           <SelectScrollDownButton className={selectScrollButtonVariants({ position: "bottom" })} />
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
