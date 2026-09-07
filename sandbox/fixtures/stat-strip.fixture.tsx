@@ -35,8 +35,18 @@ export default {
   plain: (
     <StatStrip className="w-[36rem]">
       <StatStripItem label="Impressions" value={128_400} />
-      <StatStripItem label="Clicks" value={3_210} hint="+12% vs last month" />
-      <StatStripItem label="Revenue" value={8_640} format={usd} />
+      <StatStripItem
+        label="Clicks"
+        value={3_210}
+        trend={<span className="text-success-foreground">+12.4%</span>}
+      />
+      <StatStripItem
+        label="Revenue"
+        value={8_640}
+        format={usd}
+        hint="vs last month"
+        trend={<span className="text-danger-foreground">-3.1%</span>}
+      />
     </StatStrip>
   ),
 

@@ -46,6 +46,10 @@ type StatStripItemProps = Omit<useRender.ComponentProps<"div">, "children"> & {
   format?: Format
   hint?: string
   /**
+   * Rendered at the end of the label row, e.g. a change against a previous period.
+   */
+  trend?: ReactNode
+  /**
    * Marks the item as the one driving the panel beside it. Pass `render={<button ... />}`
    * to make it selectable.
    */
@@ -57,6 +61,7 @@ function StatStripItem({
   value,
   format,
   hint,
+  trend,
   selected,
   render,
   className,
@@ -90,7 +95,10 @@ function StatStripItem({
       ),
       children: (
         <>
-          <p className="text-muted-foreground text-sm sm:truncate">{label}</p>
+          <p className="flex items-baseline justify-between gap-2 text-muted-foreground text-sm">
+            <span className="min-w-0 sm:truncate">{label}</span>
+            {trend && <span className="shrink-0">{trend}</span>}
+          </p>
 
           {/* Fixed line heights (32px / 36px) equal NumberFlow's rendered box at text-xl / text-2xl,
               so a string value ("—", "0:00") sits at exactly the same height as an animated one. */}
