@@ -88,9 +88,11 @@ function StatStripItem({
         <>
           <p className="text-muted-foreground text-sm sm:truncate">{label}</p>
 
+          {/* Fixed line heights (32px / 36px) equal NumberFlow's rendered box at text-xl / text-2xl,
+              so a string value ("—", "0:00") sits at exactly the same height as an animated one. */}
           <p
             data-value
-            className="mt-0.5 truncate font-display font-semibold text-xl tabular-nums sm:text-2xl"
+            className="mt-0.5 truncate font-display font-semibold text-xl leading-8 tabular-nums sm:text-2xl sm:leading-9"
           >
             <AnimatedNumber value={value} format={format} />
           </p>
