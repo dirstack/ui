@@ -40,6 +40,10 @@
       "types": "./dist/lib/slot.d.ts",
       "default": "./dist/lib/slot.js"
     },
+    "./tone": {
+      "types": "./dist/lib/tone.d.ts",
+      "default": "./dist/lib/tone.js"
+    },
     "./animation": {
       "types": "./dist/lib/animation.d.ts",
       "default": "./dist/lib/animation.js"

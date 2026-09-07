@@ -17,6 +17,10 @@ const badgeVariants = variants({
         "bg-warning-subtle border-warning/20 text-warning-foreground hover:[&[href],&[type]]:opacity-75",
       danger:
         "bg-danger-subtle border-danger/20 text-danger-foreground hover:[&[href],&[type]]:opacity-75",
+      // The neutral member of the `Tone` vocabulary, so a tone can map straight
+      // to a variant. Renders like `secondary`; kept distinct because its
+      // meaning (a muted status) is not `secondary`'s (a generic chip).
+      neutral: "bg-background border-border hover:[&[href],&[type]]:bg-muted",
     },
     size: {
       sm: "px-1 py-px gap-1 text-[0.625rem]",

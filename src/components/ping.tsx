@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react"
+import type { Tone } from "~/lib/tone"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const pingVariants = variants({
@@ -10,7 +11,7 @@ const pingVariants = variants({
       warning: "text-warning",
       danger: "text-danger",
       neutral: "text-muted-foreground",
-    },
+    } satisfies Record<Tone, string>,
   },
 
   defaultVariants: {
