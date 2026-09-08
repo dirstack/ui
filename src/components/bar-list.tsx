@@ -33,6 +33,11 @@ export type BarListRowProps = Omit<useRender.ComponentProps<"div">, "children"> 
    * The largest value in the list; the bar spans `value / max` of the row.
    */
   max: number
+  /**
+   * Bar width as a fraction of the row, overriding `value / max`: e.g. a rank ladder so the
+   * bars hold still while the rows' labels and values change under them.
+   */
+  share?: number
   format?: Format
   /**
    * An extra figure (revenue, conversion rate) in its own muted column before the value.
@@ -51,6 +56,7 @@ function BarListRow({
   icon,
   value,
   max,
+  share: shareOverride,
   format,
   secondaryValue,
   secondaryFormat,
@@ -60,7 +66,7 @@ function BarListRow({
   style,
   ...props
 }: BarListRowProps) {
-  const share = max > 0 ? Math.max(value / max, 0) : 0
+  const share = shareOverride ?? (max > 0 ? Math.max(value / max, 0) : 0)
 
   return useRender({
     render,
