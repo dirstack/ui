@@ -25,7 +25,7 @@ const tabsListVariants = variants({
       // the same 13px text, the same `--spacing-control` height, and a 6px outer radius over a
       // 3px inset (so the inner pill radius is 3px).
       segmented: {
-        list: "h-control justify-center rounded-md border bg-card p-[3px]",
+        list: "justify-center rounded-md border bg-card p-[3px]",
         indicator: "rounded-[3px] bg-muted",
         trigger: `rounded-[3px] px-2.5 py-[5px] ${controlTextClasses}`,
       },
@@ -40,12 +40,19 @@ const tabsListVariants = variants({
     size: {
       md: {},
       sm: {
-        list: "h-7 p-0.5",
+        list: "p-0.5",
         indicator: "rounded-[4px]",
         trigger: "rounded-[4px] px-2 py-[3px] text-xs/tight",
       },
     },
   },
+
+  // The track heights live here: `h-control` is a custom spacing token the class merger
+  // can't pair with `h-7`, so setting both on the same slot keeps both.
+  compoundVariants: [
+    { variant: "segmented", size: "md", class: { list: "h-control" } },
+    { variant: "segmented", size: "sm", class: { list: "h-7" } },
+  ],
 
   defaultVariants: {
     variant: "segmented",
