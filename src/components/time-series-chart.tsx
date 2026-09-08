@@ -55,16 +55,16 @@ export function niceMax(max: number, intervals: number): number {
 const TICK_PITCH = 80
 
 /**
- * Evenly stepped tick indexes from the first bucket: the same gap between every label, so
- * the axis reads as a regular scale. The last bucket is labelled only when the step lands
- * on it; a forced final label would sit an odd gap from its neighbour.
+ * Tick indexes: always the first and last bucket, with the rest spread evenly between them
+ * (rounded to a bucket, so gaps can differ by one). A 180-bucket range reads as cleanly as
+ * a 7-bucket one, and the axis always says where the range starts and ends.
  */
 function pickTicks(length: number, count: number): number[] {
   if (length <= count) return Array.from({ length }, (_, index) => index)
-  const step = Math.ceil((length - 1) / Math.max(count - 1, 1))
-  const ticks: number[] = []
-  for (let index = 0; index < length; index += step) ticks.push(index)
-  return ticks
+  const steps = Math.max(count - 1, 1)
+  return [
+    ...new Set(Array.from({ length: count }, (_, i) => Math.round((i * (length - 1)) / steps))),
+  ]
 }
 
 /**
@@ -271,7 +271,7 @@ export function TimeSeriesChart({
             name={label}
             type="monotone"
             stroke={color}
-            strokeWidth={1.5}
+            strokeWidth={2}
             fill={`url(#${gradientId})`}
             dot={false}
             animationDuration={ANIMATION_DURATION}
