@@ -160,6 +160,8 @@ export function TimeSeriesChart({
   useEffect(() => {
     const element = ref.current
     if (!element) return
+    // Seed from layout so the first paint already has the right tick count
+    setWidth(element.clientWidth)
     const observer = new ResizeObserver(([entry]) => setWidth(entry?.contentRect.width ?? 0))
     observer.observe(element)
     return () => observer.disconnect()
