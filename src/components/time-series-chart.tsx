@@ -161,7 +161,13 @@ export function TimeSeriesChart({
 
   return (
     <div className={cn("flex flex-col", className)} {...props}>
-      <ChartContainer config={config} className="aspect-auto h-64 w-full">
+      {/* The plot runs to the SVG's edges (no side margins), so the active dot on the first
+          point and the widest right-axis label would be clipped by the SVG box; let it
+          overflow into the card's padding instead. */}
+      <ChartContainer
+        config={config}
+        className="aspect-auto h-64 w-full [&_.recharts-surface]:overflow-visible"
+      >
         <AreaChart
           data={points}
           accessibilityLayer={false}
@@ -178,10 +184,11 @@ export function TimeSeriesChart({
             orientation="right"
             ticks={yTicks}
             domain={[low, top]}
-            width={44}
+            width={48}
             axisLine={false}
             tickLine={false}
-            tickMargin={6}
+            tickSize={0}
+            tickMargin={8}
             tickFormatter={formatTick}
           />
 
