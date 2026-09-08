@@ -45,6 +45,10 @@ export type BarListRowProps = Omit<useRender.ComponentProps<"div">, "children"> 
   secondaryValue?: number | string
   secondaryFormat?: Format
   /**
+   * Rendered after the value inside its column, e.g. a share of the total revealed on hover.
+   */
+  suffix?: ReactNode
+  /**
    * External URL, shown as an arrow beside the label that opens in a new tab. Don't combine
    * with a `render` that makes the row itself a button or link — nested interactive content.
    */
@@ -60,6 +64,7 @@ function BarListRow({
   format,
   secondaryValue,
   secondaryFormat,
+  suffix,
   href,
   render,
   className,
@@ -74,7 +79,7 @@ function BarListRow({
     props: {
       className: cn(
         rowClasses,
-        "group/bar rounded-md text-start text-sm",
+        "group/bar relative rounded-md text-start text-sm",
         // Rendered as a button or link, the row reads as a target: pointer, soft hover fill
         // and the shared focus outline.
         "[&:is(button,a)]:cursor-pointer [&:is(button,a)]:hover:bg-foreground/3",
@@ -84,14 +89,14 @@ function BarListRow({
       style: { "--bar-share": share, ...style } as CSSProperties,
       children: (
         <>
-          {/* The bar lives in the label column only: a 100% share reaches the gap before the
-              value, never under it, so the numbers always sit on clean ground. */}
-          <div className="relative flex h-full min-w-0 flex-1 items-center gap-2 pl-2.5">
-            <div
-              aria-hidden
-              className="absolute inset-y-0 left-0 w-[calc(var(--bar-share)*100%)] min-w-1.5 origin-left animate-fill-bar rounded-md bg-muted transition-[width] duration-500 ease-out-expo"
-            />
+          {/* The bar spans the whole row, so a 100% share runs edge to edge behind label and
+              value alike; the text sits above it. */}
+          <div
+            aria-hidden
+            className="absolute inset-y-0 left-0 w-[calc(var(--bar-share)*100%)] min-w-1.5 origin-left animate-fill-bar rounded-md bg-muted transition-[width] duration-500 ease-out-expo"
+          />
 
+          <div className="relative flex h-full min-w-0 flex-1 items-center gap-2 pl-2.5">
             {icon && (
               <span className="relative flex size-4 shrink-0 items-center justify-center">
                 {icon}
@@ -113,13 +118,14 @@ function BarListRow({
           </div>
 
           {secondaryValue !== undefined && (
-            <span className="min-w-16 shrink-0 text-right text-muted-foreground tabular-nums">
+            <span className="relative min-w-16 shrink-0 text-right text-muted-foreground tabular-nums">
               <AnimatedNumber value={secondaryValue} format={secondaryFormat} />
             </span>
           )}
 
-          <span className="min-w-12 shrink-0 text-right text-muted-foreground tabular-nums">
+          <span className="relative min-w-12 shrink-0 text-right text-muted-foreground tabular-nums">
             <AnimatedNumber value={value} format={format} />
+            {suffix}
           </span>
         </>
       ),
@@ -149,15 +155,13 @@ function BarListSkeleton({ rows = 5, className, ...props }: BarListSkeletonProps
   return (
     <BarListRoot aria-hidden className={className} {...props}>
       {Array.from({ length: rows }, (_, index) => (
-        <div key={index} className={rowClasses}>
-          <div className="relative h-full min-w-0 flex-1">
-            <Skeleton
-              className="absolute inset-y-0 left-0"
-              style={{ width: skeletonShares[index % skeletonShares.length] }}
-            />
-          </div>
-
-          <Skeleton className="h-3.5 w-8 shrink-0" />
+        <div key={index} className={cn(rowClasses, "relative")}>
+          <Skeleton
+            className="absolute inset-y-0 left-0"
+            style={{ width: skeletonShares[index % skeletonShares.length] }}
+          />
+          <div className="min-w-0 flex-1" />
+          <Skeleton className="relative h-3.5 w-8 shrink-0" />
         </div>
       ))}
     </BarListRoot>
