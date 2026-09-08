@@ -123,7 +123,7 @@ function BarListRow({
             </span>
           )}
 
-          <span className="relative min-w-12 shrink-0 text-right text-muted-foreground tabular-nums">
+          <span className="relative min-w-12 shrink-0 text-right font-medium text-muted-foreground tabular-nums">
             <AnimatedNumber value={value} format={format} />
             {suffix}
           </span>
