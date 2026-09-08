@@ -1,0 +1,256 @@
+"use client"
+
+import { type ComponentProps, useId } from "react"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/chart"
+import { ANIMATION_DURATION, ANIMATION_EASING } from "~/lib/animation"
+import { cn } from "~/lib/variants"
+
+export interface TimeSeriesPoint {
+  date: Date
+  value: number
+  /**
+   * The same bucket in a compared period, drawn as a dashed, unfilled line.
+   */
+  previous?: number
+}
+
+const DEFAULT_COLOR = "var(--color-chart-1)"
+
+// Built once: constructing Intl formatters is the expensive part, formatting is cheap.
+const compactNumber = new Intl.NumberFormat(undefined, { notation: "compact" })
+const wholeNumber = new Intl.NumberFormat(undefined)
+const shortDate = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" })
+const longDate = new Intl.DateTimeFormat(undefined, {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+})
+
+/**
+ * Round `max` up to a clean top-of-axis value that splits into `intervals` equal, readable
+ * steps, so grid lines land on round numbers. The step ladder is fine enough that the top
+ * never overshoots the data by more than about a fifth, which keeps the area filling the plot.
+ */
+export function niceMax(max: number, intervals: number): number {
+  if (max <= 0) return 0
+  const raw = max / intervals
+  const power = 10 ** Math.floor(Math.log10(raw))
+  const step =
+    [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].map(unit => unit * power).find(unit => unit >= raw) ??
+    raw
+  return step * intervals
+}
+
+/**
+ * Roughly evenly spaced tick indexes — first, last, and a few in between — so a 180-bucket
+ * range reads as cleanly as a 7-bucket one.
+ */
+function pickTicks(length: number, count = 5): number[] {
+  if (length <= count) return Array.from({ length }, (_, index) => index)
+  const steps = count - 1
+  return [
+    ...new Set(Array.from({ length: count }, (_, i) => Math.round((i * (length - 1)) / steps))),
+  ]
+}
+
+/**
+ * Date tick that keeps the first label inside the plot's left edge and the last inside its
+ * right edge, so nothing spills into the card padding or under the value axis.
+ */
+function EdgeTick({
+  x,
+  y,
+  payload,
+  index,
+  visibleTicksCount,
+  labels,
+}: {
+  x?: number
+  y?: number
+  payload?: { value: number }
+  index?: number
+  visibleTicksCount?: number
+  labels: string[]
+}) {
+  const anchor = index === 0 ? "start" : index === (visibleTicksCount ?? 0) - 1 ? "end" : "middle"
+
+  return (
+    <text x={x} y={y} dy={12} textAnchor={anchor} className="fill-muted-foreground text-xs">
+      {labels[payload?.value ?? -1]}
+    </text>
+  )
+}
+
+export type TimeSeriesChartProps = Omit<ComponentProps<"div">, "children"> & {
+  data: TimeSeriesPoint[]
+  /**
+   * The series name, shown in the tooltip.
+   */
+  label: string
+  /**
+   * Series colour; one of the `--color-chart-*` tokens.
+   */
+  color?: string
+  /**
+   * Value-axis tick: compact by default ("5.9K").
+   */
+  formatTick?: (value: number) => string
+  /**
+   * Tooltip value: grouped by default ("5,912").
+   */
+  formatValue?: (value: number) => string
+  /**
+   * Date-axis tick: short by default ("Sep 6").
+   */
+  formatDate?: (date: Date) => string
+  /**
+   * Tooltip heading: long by default ("September 6, 2026").
+   */
+  formatTooltipDate?: (date: Date) => string
+  /**
+   * A fixed scale (a rate pinned to `[0, 100]`) instead of a rounded top over the data.
+   */
+  domain?: [number, number]
+  /**
+   * Explicit grid lines; by default four equal intervals across the domain.
+   */
+  ticks?: number[]
+}
+
+/**
+ * The single time series: a smooth gradient area with a right-hand value axis on four
+ * round grid lines and evenly spaced date ticks along the bottom. A compared period draws
+ * as a dashed line in the same hue.
+ */
+export function TimeSeriesChart({
+  data,
+  label,
+  color = DEFAULT_COLOR,
+  formatTick = value => compactNumber.format(value),
+  formatValue = value => wholeNumber.format(value),
+  formatDate = date => shortDate.format(date),
+  formatTooltipDate = date => longDate.format(date),
+  domain,
+  ticks,
+  className,
+  ...props
+}: TimeSeriesChartProps) {
+  const gradientId = `fill-${useId().replace(/:/g, "")}`
+  const compared = data.some(point => point.previous !== undefined)
+  const config = {
+    value: { label, color },
+    previous: { label: `${label} (previous)` },
+  } satisfies ChartConfig
+
+  // The x key is the index: labels can repeat ("14:00" on two days) and recharts matches
+  // ticks by value.
+  const points = data.map((point, index) => ({ ...point, index }))
+  const labels = data.map(point => formatDate(point.date))
+
+  // Four lines for grid, axis labels and the area's baseline, on a rounded top so they land on
+  // round numbers. An all-zero series still gets a visible scale.
+  const max = Math.max(...data.flatMap(point => [point.value, point.previous ?? 0]), 0)
+  const [low, top] = domain ?? [0, niceMax(max, 3) || 1]
+  const yTicks = ticks ?? [0, 1, 2, 3].map(i => low + ((top - low) * i) / 3)
+
+  return (
+    <div className={cn("flex flex-col", className)} {...props}>
+      <ChartContainer config={config} className="aspect-auto h-64 w-full">
+        <AreaChart
+          data={points}
+          accessibilityLayer={false}
+          margin={{ top: 8, right: 0, bottom: 0, left: 0 }}
+        >
+          <defs>
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color} stopOpacity={0.25} />
+              <stop offset="95%" stopColor={color} stopOpacity={0.01} />
+            </linearGradient>
+          </defs>
+
+          <YAxis
+            orientation="right"
+            ticks={yTicks}
+            domain={[low, top]}
+            width={44}
+            axisLine={false}
+            tickLine={false}
+            tickMargin={6}
+            tickFormatter={formatTick}
+          />
+
+          <XAxis
+            dataKey="index"
+            ticks={pickTicks(points.length)}
+            interval={0}
+            axisLine={false}
+            tickLine={false}
+            tickMargin={4}
+            minTickGap={0}
+            tick={<EdgeTick labels={labels} />}
+          />
+
+          <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border/75" />
+
+          <ChartTooltip
+            isAnimationActive={false}
+            cursor={{ className: "stroke-border" }}
+            // The current period reads first, whatever the draw order
+            itemSorter={item => (item.dataKey === "value" ? 0 : 1)}
+            // recharts hands its own `content` down; it collides with the div attribute
+            content={contentProps => (
+              <ChartTooltipContent
+                {...contentProps}
+                content={undefined}
+                formatter={(value, name) => (
+                  <>
+                    <span className="flex-1 text-muted-foreground">{name}</span>
+                    <span className="font-medium tabular-nums">{formatValue(Number(value))}</span>
+                  </>
+                )}
+                labelFormatter={(_label, payload) => {
+                  const date = payload?.[0]?.payload?.date
+                  return date instanceof Date ? formatTooltipDate(date) : ""
+                }}
+              />
+            )}
+          />
+
+          {compared && (
+            <Area
+              dataKey="previous"
+              name={config.previous.label}
+              type="monotone"
+              stroke={color}
+              strokeWidth={1.5}
+              strokeDasharray="4 4"
+              strokeOpacity={0.5}
+              fill="none"
+              dot={false}
+              animationDuration={ANIMATION_DURATION}
+              animationEasing={ANIMATION_EASING}
+            />
+          )}
+
+          <Area
+            dataKey="value"
+            name={label}
+            type="monotone"
+            stroke={color}
+            strokeWidth={1.5}
+            fill={`url(#${gradientId})`}
+            dot={false}
+            animationDuration={ANIMATION_DURATION}
+            animationEasing={ANIMATION_EASING}
+          />
+        </AreaChart>
+      </ChartContainer>
+    </div>
+  )
+}
