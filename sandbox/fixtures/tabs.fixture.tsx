@@ -22,6 +22,18 @@ export default {
     </Tabs>
   ),
 
+  // The card-header step down: a 28px segmented track with 12px labels.
+  small: (
+    <Tabs defaultValue="top">
+      <TabsList size="sm">
+        <TabsTrigger value="top">Top</TabsTrigger>
+        <TabsTrigger value="entry">Entry</TabsTrigger>
+        <TabsTrigger value="exit">Exit</TabsTrigger>
+        <TabsTrigger value="404">404s</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  ),
+
   both: (
     <Stack direction="column" size="lg">
       <Tabs defaultValue="a">

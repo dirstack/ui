@@ -7,7 +7,7 @@ const emptyStateVariants = variants({
     root: "",
     icon: "flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground [&_svg]:size-5",
     content: "space-y-1",
-    title: "",
+    title: "text-balance",
     description: descriptionClasses,
     action: "",
   },

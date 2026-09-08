@@ -36,16 +36,30 @@ const tabsListVariants = variants({
         trigger: "px-2.5 py-1.5 text-sm",
       },
     },
+    // `sm` is a step down for a card header: a 28px track with 12px labels.
+    size: {
+      md: {},
+      sm: {
+        list: "h-7 p-0.5",
+        indicator: "rounded-[4px]",
+        trigger: "rounded-[4px] px-2 py-[3px] text-xs/tight",
+      },
+    },
   },
 
   defaultVariants: {
     variant: "segmented",
+    size: "md",
   },
 })
 
 type TabsVariant = NonNullable<VariantProps<typeof tabsListVariants>["variant"]>
+type TabsSize = NonNullable<VariantProps<typeof tabsListVariants>["size"]>
 
-const TabsVariantContext = createContext<TabsVariant>("segmented")
+const TabsVariantContext = createContext<{ variant: TabsVariant; size: TabsSize }>({
+  variant: "segmented",
+  size: "md",
+})
 
 /**
  * Sliding highlight that tracks the active tab via Base UI's --active-tab-*
@@ -55,11 +69,11 @@ const TabsVariantContext = createContext<TabsVariant>("segmented")
  * glides in sync with the number spins and chart draws it sits beside.
  */
 function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
-  const variant = useContext(TabsVariantContext)
+  const { variant, size } = useContext(TabsVariantContext)
 
   return (
     <TabsPrimitive.Indicator
-      className={cn(tabsListVariants({ variant }).indicator(), className)}
+      className={cn(tabsListVariants({ variant, size }).indicator(), className)}
       {...props}
     />
   )
@@ -67,11 +81,17 @@ function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
 
 type TabsListProps = TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>
 
-function TabsList({ className, children, variant = "segmented", ...props }: TabsListProps) {
+function TabsList({
+  className,
+  children,
+  variant = "segmented",
+  size = "md",
+  ...props
+}: TabsListProps) {
   return (
-    <TabsVariantContext value={variant}>
+    <TabsVariantContext value={{ variant, size }}>
       <TabsPrimitive.List
-        className={cn(tabsListVariants({ variant }).list(), className)}
+        className={cn(tabsListVariants({ variant, size }).list(), className)}
         {...props}
       >
         <TabsIndicator />
@@ -82,11 +102,11 @@ function TabsList({ className, children, variant = "segmented", ...props }: Tabs
 }
 
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
-  const variant = useContext(TabsVariantContext)
+  const { variant, size } = useContext(TabsVariantContext)
 
   return (
     <TabsPrimitive.Tab
-      className={cn(tabsListVariants({ variant }).trigger(), className)}
+      className={cn(tabsListVariants({ variant, size }).trigger(), className)}
       {...props}
     />
   )
