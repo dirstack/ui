@@ -55,39 +55,36 @@ export function niceMax(max: number, intervals: number): number {
 const TICK_PITCH = 80
 
 /**
- * Evenly stepped tick indexes: the first, then every `step`, and always the last, dropping
- * a penultimate tick that would crowd it.
+ * Evenly stepped tick indexes from the first bucket: the same gap between every label, so
+ * the axis reads as a regular scale. The last bucket is labelled only when the step lands
+ * on it; a forced final label would sit an odd gap from its neighbour.
  */
 function pickTicks(length: number, count: number): number[] {
   if (length <= count) return Array.from({ length }, (_, index) => index)
   const step = Math.ceil((length - 1) / Math.max(count - 1, 1))
   const ticks: number[] = []
-  for (let index = 0; index < length - 1; index += step) ticks.push(index)
-  if (length - 1 - ticks[ticks.length - 1]! < step / 2) ticks.pop()
-  ticks.push(length - 1)
+  for (let index = 0; index < length; index += step) ticks.push(index)
   return ticks
 }
 
 /**
- * Date tick that keeps the first label inside the plot's left edge and the last inside its
- * right edge, so nothing spills into the card padding or under the value axis.
+ * Date tick that keeps the first bucket's label inside the plot's left edge and the last
+ * bucket's inside its right edge, so nothing spills into the card padding or under the
+ * value axis.
  */
 function EdgeTick({
   x,
   y,
   payload,
-  index,
-  visibleTicksCount,
   labels,
 }: {
   x?: number
   y?: number
   payload?: { value: number }
-  index?: number
-  visibleTicksCount?: number
   labels: string[]
 }) {
-  const anchor = index === 0 ? "start" : index === (visibleTicksCount ?? 0) - 1 ? "end" : "middle"
+  const index = payload?.value ?? -1
+  const anchor = index === 0 ? "start" : index === labels.length - 1 ? "end" : "middle"
 
   return (
     <text x={x} y={y} dy={12} textAnchor={anchor} className="fill-muted-foreground text-xs">
