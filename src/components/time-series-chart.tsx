@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/chart"
-import { ANIMATION_DURATION, ANIMATION_EASING } from "~/lib/animation"
+import { ANIMATION_DURATION, ANIMATION_EASING, useReducedMotion } from "~/lib/animation"
 import { cn } from "~/lib/variants"
 
 export interface TimeSeriesPoint {
@@ -159,6 +159,7 @@ export function TimeSeriesChart({
 }: TimeSeriesChartProps) {
   const gradientId = `fill-${useId().replace(/:/g, "")}`
   const compared = data.some(point => point.previous !== undefined)
+  const reducedMotion = useReducedMotion()
 
   // The plot's width decides how many date labels fit; measured, since the chart fills
   // whatever card it sits in.
@@ -285,6 +286,7 @@ export function TimeSeriesChart({
               strokeOpacity={0.5}
               fill="none"
               dot={false}
+              isAnimationActive={!reducedMotion}
               animationDuration={ANIMATION_DURATION}
               animationEasing={ANIMATION_EASING}
             />
@@ -298,6 +300,7 @@ export function TimeSeriesChart({
             strokeWidth={2}
             fill={`url(#${gradientId})`}
             dot={false}
+            isAnimationActive={!reducedMotion}
             animationDuration={ANIMATION_DURATION}
             animationEasing={ANIMATION_EASING}
           />
