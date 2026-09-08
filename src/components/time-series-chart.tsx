@@ -1,6 +1,6 @@
 "use client"
 
-import { type ComponentProps, useId } from "react"
+import { type ComponentProps, useEffect, useId, useRef, useState } from "react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import {
   type ChartConfig,
@@ -21,6 +21,7 @@ export interface TimeSeriesPoint {
 }
 
 const DEFAULT_COLOR = "var(--color-chart-1)"
+const AXIS_WIDTH = 48
 
 // Built once: constructing Intl formatters is the expensive part, formatting is cheap.
 const compactNumber = new Intl.NumberFormat(undefined, { notation: "compact" })
@@ -48,15 +49,23 @@ export function niceMax(max: number, intervals: number): number {
 }
 
 /**
- * Roughly evenly spaced tick indexes — first, last, and a few in between — so a 180-bucket
- * range reads as cleanly as a 7-bucket one.
+ * Room for one date label. Ticks are thinned to what the plot can hold at this pitch, so a
+ * week shows every day on a wide card and a 180-day range still reads on a narrow one.
  */
-function pickTicks(length: number, count = 5): number[] {
+const TICK_PITCH = 80
+
+/**
+ * Evenly stepped tick indexes: the first, then every `step`, and always the last, dropping
+ * a penultimate tick that would crowd it.
+ */
+function pickTicks(length: number, count: number): number[] {
   if (length <= count) return Array.from({ length }, (_, index) => index)
-  const steps = count - 1
-  return [
-    ...new Set(Array.from({ length: count }, (_, i) => Math.round((i * (length - 1)) / steps))),
-  ]
+  const step = Math.ceil((length - 1) / Math.max(count - 1, 1))
+  const ticks: number[] = []
+  for (let index = 0; index < length - 1; index += step) ticks.push(index)
+  if (length - 1 - ticks[ticks.length - 1]! < step / 2) ticks.pop()
+  ticks.push(length - 1)
+  return ticks
 }
 
 /**
@@ -143,6 +152,19 @@ export function TimeSeriesChart({
 }: TimeSeriesChartProps) {
   const gradientId = `fill-${useId().replace(/:/g, "")}`
   const compared = data.some(point => point.previous !== undefined)
+
+  // The plot's width decides how many date labels fit; measured, since the chart fills
+  // whatever card it sits in.
+  const [width, setWidth] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+    const observer = new ResizeObserver(([entry]) => setWidth(entry?.contentRect.width ?? 0))
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+  const tickCount = Math.max(2, Math.floor((width - AXIS_WIDTH) / TICK_PITCH))
   const config = {
     value: { label, color },
     previous: { label: `${label} (previous)` },
@@ -160,7 +182,7 @@ export function TimeSeriesChart({
   const yTicks = ticks ?? [0, 1, 2, 3].map(i => low + ((top - low) * i) / 3)
 
   return (
-    <div className={cn("flex flex-col", className)} {...props}>
+    <div ref={ref} className={cn("flex flex-col", className)} {...props}>
       {/* The plot runs to the SVG's edges (no side margins), so the active dot on the first
           point and the widest right-axis label would be clipped by the SVG box; let it
           overflow into the card's padding instead. */}
@@ -184,7 +206,7 @@ export function TimeSeriesChart({
             orientation="right"
             ticks={yTicks}
             domain={[low, top]}
-            width={48}
+            width={AXIS_WIDTH}
             axisLine={false}
             tickLine={false}
             tickSize={0}
@@ -194,7 +216,7 @@ export function TimeSeriesChart({
 
           <XAxis
             dataKey="index"
-            ticks={pickTicks(points.length)}
+            ticks={pickTicks(points.length, tickCount)}
             interval={0}
             axisLine={false}
             tickLine={false}
