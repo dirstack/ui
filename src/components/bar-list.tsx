@@ -89,7 +89,7 @@ function BarListRow({
           <div className="relative flex h-full min-w-0 flex-1 items-center gap-2 pl-2.5">
             <div
               aria-hidden
-              className="absolute inset-y-0 left-0 w-[calc(var(--bar-share)*100%)] min-w-1.5 origin-left animate-fill-bar rounded-md bg-muted transition-[width,background-color] duration-500 ease-out-expo"
+              className="absolute inset-y-0 left-0 w-[calc(var(--bar-share)*100%)] min-w-1.5 origin-left animate-fill-bar rounded-md bg-muted transition-[width] duration-500 ease-out-expo"
             />
 
             {icon && (
