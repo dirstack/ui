@@ -49,6 +49,11 @@ export type BarListRowProps = Omit<useRender.ComponentProps<"div">, "children"> 
    */
   suffix?: ReactNode
   /**
+   * Spin the figures to new values (default). Off, they swap at once, which reads better
+   * when a row's position may hold a different thing after a change; the bar still glides.
+   */
+  animated?: boolean
+  /**
    * External URL, shown as an arrow beside the label that opens in a new tab. Don't combine
    * with a `render` that makes the row itself a button or link — nested interactive content.
    */
@@ -65,6 +70,7 @@ function BarListRow({
   secondaryValue,
   secondaryFormat,
   suffix,
+  animated = true,
   href,
   render,
   className,
@@ -119,12 +125,12 @@ function BarListRow({
 
           {secondaryValue !== undefined && (
             <span className="relative min-w-16 shrink-0 text-right text-muted-foreground tabular-nums">
-              <AnimatedNumber value={secondaryValue} format={secondaryFormat} />
+              <AnimatedNumber value={secondaryValue} format={secondaryFormat} animated={animated} />
             </span>
           )}
 
           <span className="relative min-w-12 shrink-0 text-right font-medium text-muted-foreground tabular-nums">
-            <AnimatedNumber value={value} format={format} />
+            <AnimatedNumber value={value} format={format} animated={animated} />
             {suffix}
           </span>
         </>
