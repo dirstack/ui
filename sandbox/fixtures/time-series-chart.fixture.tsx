@@ -53,6 +53,13 @@ export default {
     </div>
   ),
 
+  // Straight segments between buckets instead of the smooth curve.
+  linear: (
+    <div className="w-[48rem]">
+      <TimeSeriesChart data={week} label="Visitors" curve="linear" />
+    </div>
+  ),
+
   // No data in range: the scale still draws.
   empty: (
     <div className="w-[48rem]">

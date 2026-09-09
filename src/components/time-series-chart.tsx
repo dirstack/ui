@@ -137,6 +137,11 @@ export type TimeSeriesChartProps = Omit<ComponentProps<"div">, "children"> & {
    * Explicit grid lines; by default four equal intervals across the domain.
    */
   ticks?: number[]
+  /**
+   * Line shape: a smooth curve through the points by default, or straight segments between
+   * them (`"linear"`) so each bucket reads as a corner.
+   */
+  curve?: "smooth" | "linear"
 }
 
 /**
@@ -154,9 +159,11 @@ export function TimeSeriesChart({
   formatTooltipDate = date => longDate.format(date),
   domain,
   ticks,
+  curve = "smooth",
   className,
   ...props
 }: TimeSeriesChartProps) {
+  const type = curve === "smooth" ? "monotone" : "linear"
   const gradientId = `fill-${useId().replace(/:/g, "")}`
   const compared = data.some(point => point.previous !== undefined)
   const reducedMotion = useReducedMotion()
@@ -279,7 +286,7 @@ export function TimeSeriesChart({
             <Area
               dataKey="previous"
               name={config.previous.label}
-              type="monotone"
+              type={type}
               stroke={color}
               strokeWidth={1.5}
               strokeDasharray="4 4"
@@ -295,7 +302,7 @@ export function TimeSeriesChart({
           <Area
             dataKey="value"
             name={label}
-            type="monotone"
+            type={type}
             stroke={color}
             strokeWidth={2}
             fill={`url(#${gradientId})`}
