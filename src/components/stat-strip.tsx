@@ -6,6 +6,7 @@ import { cardSurfaceClasses } from "~/components/card"
 import { cn, variants, type VariantProps } from "~/lib/variants"
 
 const stripVariants = variants({
+  // Two-up on a phone, in a tighter cut (see the item); a lone last tile spans the row.
   base: "group/strip grid grid-cols-2 gap-y-1 max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:flex sm:flex-wrap sm:gap-y-0",
 
   variants: {
@@ -75,7 +76,7 @@ function StatStripItem({
       className: cn(
         // The border is always laid out and only colored when selected, so toggling
         // never shifts the row.
-        "relative min-w-0 flex-1 rounded-lg border border-transparent px-4 py-3 text-start",
+        "relative min-w-0 flex-1 rounded-lg border border-transparent px-3 py-2 text-start sm:px-4 sm:py-3",
         // Hairline divider between neighbours. The plain strip hides it around the
         // selected fill; the track keeps it, centered in the gap between cards.
         "before:absolute before:inset-y-2 before:-left-px before:w-px before:bg-border first:before:hidden max-sm:before:hidden",
@@ -96,15 +97,15 @@ function StatStripItem({
       children: (
         <>
           <p className="flex items-baseline justify-between gap-2 text-muted-foreground text-sm">
-            <span className="min-w-0 sm:truncate">{label}</span>
+            <span className="min-w-0 truncate">{label}</span>
             {trend && <span className="shrink-0">{trend}</span>}
           </p>
 
-          {/* Fixed line heights (32px / 36px) equal NumberFlow's rendered box at text-xl / text-2xl,
+          {/* Fixed line heights (28px / 36px) equal NumberFlow's rendered box at text-lg / text-2xl,
               so a string value ("—", "0:00") sits at exactly the same height as an animated one. */}
           <p
             data-value
-            className="mt-0.5 truncate font-display font-semibold text-xl leading-8 tabular-nums sm:text-2xl sm:leading-9"
+            className="mt-0.5 truncate font-display font-semibold text-lg leading-7 tabular-nums sm:text-2xl sm:leading-9"
           >
             {isValidElement(value) || (typeof value !== "number" && typeof value !== "string") ? (
               value
@@ -113,7 +114,7 @@ function StatStripItem({
             )}
           </p>
 
-          {hint && <p className="text-muted-foreground text-xs sm:truncate">{hint}</p>}
+          {hint && <p className="truncate text-muted-foreground text-xs">{hint}</p>}
         </>
       ),
       ...props,

@@ -16,7 +16,9 @@ const sectionHeaderVariants = variants({
     size: {
       page: "gap-y-3 gap-x-6 max-sm:flex-col max-sm:items-stretch lg:gap-x-12",
       card: "gap-y-2 gap-x-6 max-sm:flex-col max-sm:items-stretch",
-      panel: "gap-y-2 gap-x-6",
+      // The title block keeps its content width in the wrap calculation, so the actions (a
+      // card's tab row) drop under it only when the two really cannot share the line.
+      panel: "gap-y-2 gap-x-6 [&>*:first-child]:flex-auto",
       hero: "gap-y-3 gap-x-6 lg:gap-x-12",
     },
     wrap: {

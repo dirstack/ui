@@ -126,7 +126,7 @@ function MenuSeparator({ className, ...props }: MenuPrimitive.Separator.Props) {
 }
 
 function MenuShortcut({ className, ...props }: ComponentProps<typeof Kbd>) {
-  return <Kbd className={cn("ml-auto", className)} {...props} />
+  return <Kbd className={cn("ml-auto pointer-coarse:hidden", className)} {...props} />
 }
 
 export {

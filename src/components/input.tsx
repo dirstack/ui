@@ -5,7 +5,7 @@ import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const inputVariants = variants({
   extend: interactiveVariants,
-  base: `appearance-none min-h-0 w-full self-stretch bg-card text-foreground ${controlTextClasses} break-words disabled:text-secondary-foreground/50`,
+  base: `appearance-none min-h-0 w-full self-stretch bg-card text-foreground ${controlTextClasses} pointer-coarse:text-base break-words disabled:text-secondary-foreground/50`,
 
   variants: {
     size: {

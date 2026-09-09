@@ -38,13 +38,13 @@ export function FormSection({
     defaultTagName: "section",
     props: {
       id,
-      className: cn("flex flex-col divide-y px-5 md:px-6", className),
+      className: cn("flex flex-col divide-y px-4 sm:px-5 md:px-6", className),
       children: (
         <>
           {(title || actions) && (
             <SectionHeader
               size="panel"
-              className="py-4 max-sm:flex-col max-sm:items-stretch"
+              className="py-4"
               title={title}
               description={description}
               actions={actions}

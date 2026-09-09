@@ -170,6 +170,39 @@
     border-color: var(--color-border);
   }
 
+  /* No grey flash from the OS on tap; the `:active` rule below is the feedback instead. */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Taps fire at once, with no double-tap-to-zoom wait, on anything that acts like a control. */
+  a[href],
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"] {
+    touch-action: manipulation;
+  }
+
+  /*
+   * Tap feedback. `hover:` is gated behind `@media (hover: hover)`, so on a touch screen a
+   * press would look inert; one rule dims every control the same amount, whatever its size.
+   */
+  @media (pointer: coarse) {
+    :is(
+        button,
+        [role="button"],
+        [role="tab"],
+        [role="menuitem"],
+        [role="option"],
+        a[href],
+        label[for]
+      ):active:not(:disabled, [aria-disabled="true"]) {
+      opacity: 0.6;
+    }
+  }
+
   /* Dashed background used by the Dialog backdrop and the dashed empty state. */
   .bg-dashed {
     background-image: linear-gradient(

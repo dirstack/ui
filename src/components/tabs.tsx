@@ -15,7 +15,7 @@ const tabsListVariants = variants({
       "absolute top-1/2 left-0 z-0 h-[var(--active-tab-height)] w-[var(--active-tab-width)] -translate-y-1/2 translate-x-[var(--active-tab-left)] rounded-md transition-[translate,width] duration-500 ease-out-expo",
     trigger: cn(
       interactiveVariants({ focus: true }),
-      "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium disabled:pointer-events-none disabled:opacity-50 hover:text-foreground data-active:text-foreground",
+      "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md pointer-coarse:min-h-10 font-medium disabled:pointer-events-none disabled:opacity-50 hover:text-foreground data-active:text-foreground",
     ),
   },
 
@@ -25,7 +25,7 @@ const tabsListVariants = variants({
       // the same 13px text, the same `--spacing-control` height, and a 6px outer radius over a
       // 3px inset (so the inner pill radius is 3px).
       segmented: {
-        list: "justify-center rounded-md border bg-card p-[3px]",
+        list: "justify-center rounded-md border bg-card p-[3px] pointer-coarse:h-auto",
         indicator: "rounded-[3px] bg-muted",
         trigger: `rounded-[3px] px-2.5 py-[5px] ${controlTextClasses}`,
       },

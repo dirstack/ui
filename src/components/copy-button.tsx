@@ -9,6 +9,7 @@ import {
 import { Button } from "~/components/button"
 import { Tooltip } from "~/components/tooltip"
 import { CheckIcon, CopyIcon } from "~/lib/icons"
+import { cn } from "~/lib/variants"
 
 /**
  * Copies text to the clipboard and flips `copied` to `true` for `timeout` ms, then back.
@@ -61,6 +62,7 @@ export function CopyButton({
   label,
   copiedLabel = "Copied",
   tooltip = label ? undefined : "Copy to clipboard",
+  className,
   ...props
 }: CopyButtonProps) {
   const clipboard = useClipboard({ timeout: 2000 })
@@ -73,6 +75,7 @@ export function CopyButton({
         aria-label={label ? undefined : "Copy to clipboard"}
         prefix={clipboard.copied ? <CheckIcon className="text-success" /> : <CopyIcon />}
         onClick={() => clipboard.copy(value)}
+        className={cn(!label && "pointer-coarse:size-10", className)}
         {...props}
       >
         {label && (clipboard.copied ? copiedLabel : label)}

@@ -1,7 +1,7 @@
 "use client"
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import type { ComponentProps, ReactNode } from "react"
+import { type ComponentProps, createContext, type ReactNode, use } from "react"
 import { Button } from "~/components/button"
 import {
   SectionHeader,
@@ -14,6 +14,19 @@ import { variants, cn, type VariantProps } from "~/lib/variants"
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
+
+/** `hideClose` from `DialogContent`, read by `DialogHeader` so its own X follows suit. */
+const DialogCloseContext = createContext(false)
+
+/** The one X: a ghost button in the header row when there is a header, else pinned to the corner. */
+function DialogX({ className }: { className?: string }) {
+  return (
+    <DialogPrimitive.Close
+      render={<Button variant="ghost" size="sm" aria-label="Close" prefix={<XIcon />} />}
+      className={cn("pointer-coarse:size-10", className)}
+    />
+  )
+}
 const DialogTitle = DialogPrimitive.Title
 const DialogDescription = DialogPrimitive.Description
 
@@ -113,13 +126,11 @@ function DialogContent({
         className={dialogContentVariants({ size, fixed, flush, className })}
         {...props}
       >
-        {children}
+        <DialogCloseContext value={!!hideClose}>{children}</DialogCloseContext>
 
+        {/* Corner fallback for a dialog without a `DialogHeader`, which hosts the X itself */}
         {!hideClose && (
-          <DialogPrimitive.Close
-            render={<Button variant="ghost" size="sm" aria-label="Close" prefix={<XIcon />} />}
-            className="absolute top-3 right-3"
-          />
+          <DialogX className="absolute top-3 right-3 z-20 pointer-coarse:top-1.5 pointer-coarse:right-1.5 [[data-slot=dialog-header]~&]:hidden" />
         )}
       </DialogPrimitive.Popup>
     </DialogPrimitive.Portal>
@@ -127,13 +138,16 @@ function DialogContent({
 }
 
 const dialogHeaderVariants = variants({
+  // `relative` anchors the X, which leaves the row under `sm` where the card header stacks
+  base: "relative",
+
   variants: {
     /**
      * Give the header its own hairline and padding, for a `flush` dialog whose body scrolls
-     * under it. The extra right padding clears the dialog's close button.
+     * under it.
      */
     bordered: {
-      true: "border-b px-6 py-5 pr-14",
+      true: "border-b px-6 py-5",
     },
   },
 })
@@ -147,7 +161,7 @@ type DialogHeaderProps = Omit<ComponentProps<typeof SectionHeader>, "title" | "d
 /**
  * The standard dialog heading: a card-scale `SectionHeader` whose title and description are wired to
  * Base UI's `DialogTitle` / `DialogDescription` for accessibility. Extra children render after
- * them.
+ * them, and the dialog's X sits at the end of the row, centred on the title line.
  */
 function DialogHeader({
   title,
@@ -157,10 +171,20 @@ function DialogHeader({
   children,
   ...props
 }: DialogHeaderProps) {
+  const hideClose = use(DialogCloseContext)
+
   return (
-    <SectionHeader size="card" className={dialogHeaderVariants({ bordered, className })} {...props}>
+    <SectionHeader
+      size="card"
+      data-slot="dialog-header"
+      className={dialogHeaderVariants({ bordered, className })}
+      {...props}
+    >
       <SectionHeaderBody>
-        <DialogTitle render={<SectionHeaderTitle />}>{title}</DialogTitle>
+        {/* A step smaller in the bottom sheet, where the title is a row label, not a page heading */}
+        <DialogTitle render={<SectionHeaderTitle className="max-sm:text-base" />}>
+          {title}
+        </DialogTitle>
 
         {description && (
           <DialogDescription render={<SectionHeaderDescription />}>{description}</DialogDescription>
@@ -168,6 +192,21 @@ function DialogHeader({
       </SectionHeaderBody>
 
       {children}
+
+      {!hideClose && (
+        // A box the height of the title line (28px, 24px in the sheet), so the X centres on the
+        // title whatever sits under it; pulled out by 6px so the glyph's edge sits on the same
+        // inset as the title's. Under `sm` the card header stacks into a column, so the box
+        // leaves the flow and pins itself to the title line instead.
+        <div
+          className={cn(
+            "-mr-1.5 flex h-7 shrink-0 items-center self-start max-sm:absolute max-sm:mr-0 max-sm:h-6",
+            bordered ? "max-sm:top-5 max-sm:right-4.5" : "max-sm:top-0 max-sm:-right-1.5",
+          )}
+        >
+          <DialogX />
+        </div>
+      )}
     </SectionHeader>
   )
 }
