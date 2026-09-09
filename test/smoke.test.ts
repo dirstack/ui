@@ -49,6 +49,7 @@ describe("@dirstack/ui exports", () => {
     const { Pagination } = await import("~/components/pagination")
     const { CopyInput } = await import("~/components/copy-input")
     const { NavButton, NavButtonSkeleton, NavIdentity } = await import("~/components/nav-button")
+    const { ResponsiveMenu } = await import("~/components/responsive-menu")
 
     const components = [
       AnimatedNumber,
@@ -59,6 +60,7 @@ describe("@dirstack/ui exports", () => {
       NavButton,
       NavButtonSkeleton,
       NavIdentity,
+      ResponsiveMenu,
     ]
 
     for (const component of components) {
