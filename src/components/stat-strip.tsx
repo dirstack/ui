@@ -6,8 +6,10 @@ import { cardSurfaceClasses } from "~/components/card"
 import { cn, variants, type VariantProps } from "~/lib/variants"
 
 const stripVariants = variants({
-  // Two-up on a phone, in a tighter cut (see the item); a lone last tile spans the row.
-  base: "group/strip grid grid-cols-2 gap-y-1 max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:flex sm:flex-wrap sm:gap-y-0",
+  // Stacked in a tighter cut (see the item) until there is room for one row: two-up on a
+  // phone, three-up on a tablet, then a flex row that fits however many stats there are.
+  // A lone last tile spans the row on a phone.
+  base: "group/strip grid grid-cols-2 gap-y-1 max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:gap-y-0",
 
   variants: {
     variant: {
@@ -16,7 +18,7 @@ const stripVariants = variants({
       // A canvas-toned track where the selected figure sits on a raised card, like a
       // segmented control; for strips that drive the panel beside them.
       // 13px gap: a 1px divider then sits 6px from the card on either side, matching the 6px inset.
-      track: "rounded-xl bg-background p-1.5 sm:gap-x-[13px]",
+      track: "rounded-xl bg-background p-1.5 lg:gap-x-[13px]",
     },
   },
 
@@ -79,7 +81,7 @@ function StatStripItem({
         "relative min-w-0 flex-1 rounded-lg border border-transparent px-3 py-2 text-start sm:px-4 sm:py-3",
         // Hairline divider between neighbours. The plain strip hides it around the
         // selected fill; the track keeps it, centered in the gap between cards.
-        "before:absolute before:inset-y-2 before:-left-px before:w-px before:bg-border first:before:hidden max-sm:before:hidden",
+        "before:absolute before:inset-y-2 before:-left-px before:w-px before:bg-border first:before:hidden max-lg:before:hidden",
         "group-data-[variant=plain]/strip:data-selected:before:hidden group-data-[variant=plain]/strip:[[data-selected]+&]:before:hidden",
         // Offsets are measured from the padding box, so the 1px border is added to land
         // exactly halfway across the 13px gap.
