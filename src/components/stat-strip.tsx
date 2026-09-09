@@ -105,7 +105,9 @@ function StatStripItem({
               so a string value ("—", "0:00") sits at exactly the same height as an animated one. */}
           <p
             data-value
-            className="mt-0.5 truncate font-display font-semibold text-lg leading-7 tabular-nums sm:text-2xl sm:leading-9"
+            // Clipped, but no ellipsis: NumberFlow lays each digit out in its own box, so
+            // the browser paints the "…" over the digits instead of after them.
+            className="mt-0.5 overflow-hidden whitespace-nowrap font-display font-semibold text-lg leading-7 tabular-nums sm:text-2xl sm:leading-9"
           >
             {isValidElement(value) || (typeof value !== "number" && typeof value !== "string") ? (
               value
