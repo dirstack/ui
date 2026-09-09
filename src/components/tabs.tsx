@@ -29,9 +29,10 @@ const tabsListVariants = variants({
         indicator: "rounded-[3px] bg-muted",
         trigger: `rounded-[3px] px-2.5 py-[5px] ${controlTextClasses}`,
       },
-      // Plain pills: no track, the active tab sits on a soft pill. For in-card view switchers.
+      // Plain pills: no track, no gap and no padding around the row, so the first label sits
+      // flush with whatever the list aligns to; the active tab sits on a soft pill. For
+      // in-card view switchers.
       plain: {
-        list: "gap-0.5",
         indicator: "bg-muted",
         trigger: "px-2.5 py-1.5 text-sm",
       },
@@ -40,18 +41,18 @@ const tabsListVariants = variants({
     size: {
       md: {},
       sm: {
-        list: "p-0.5",
         indicator: "rounded-[4px]",
         trigger: "rounded-[4px] px-2 py-[3px] text-xs/tight",
       },
     },
   },
 
-  // The track heights live here: `h-control` is a custom spacing token the class merger
-  // can't pair with `h-7`, so setting both on the same slot keeps both.
+  // The track heights and the small track's inset live here: `h-control` is a custom
+  // spacing token the class merger can't pair with `h-7`, so setting both on the same slot
+  // keeps both, and the inset belongs to the track, not to the size.
   compoundVariants: [
     { variant: "segmented", size: "md", class: { list: "h-control" } },
-    { variant: "segmented", size: "sm", class: { list: "h-7" } },
+    { variant: "segmented", size: "sm", class: { list: "h-7 p-0.5" } },
   ],
 
   defaultVariants: {
