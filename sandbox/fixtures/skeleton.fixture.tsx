@@ -12,6 +12,13 @@ export default {
     </Stack>
   ),
 
+  // Inside running text the stand-in has to be an inline element
+  inline: (
+    <p className="text-2xl font-semibold leading-9">
+      <Skeleton render={<span />} className="inline-block h-5 w-16 align-middle" />
+    </p>
+  ),
+
   card: (
     <div className="w-64 rounded-lg border p-4">
       <Stack direction="column" size="md" className="w-full">

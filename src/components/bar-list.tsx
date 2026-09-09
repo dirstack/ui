@@ -155,8 +155,7 @@ export type BarListSkeletonProps = ComponentProps<"div"> & {
 
 /**
  * Loading stand-in at the exact row height of `BarList.Row`, so swapping in data causes no
- * layout shift, in the bars' own colour, so the rows that replace it don't read as a change
- * of tone.
+ * layout shift; `Skeleton` is already the bars' colour.
  */
 function BarListSkeleton({ rows = 5, className, ...props }: BarListSkeletonProps) {
   return (
@@ -164,11 +163,11 @@ function BarListSkeleton({ rows = 5, className, ...props }: BarListSkeletonProps
       {Array.from({ length: rows }, (_, index) => (
         <div key={index} className={cn(rowClasses, "relative")}>
           <Skeleton
-            className="absolute inset-y-0 left-0 bg-muted"
+            className="absolute inset-y-0 left-0"
             style={{ width: skeletonShares[index % skeletonShares.length] }}
           />
           <div className="min-w-0 flex-1" />
-          <Skeleton className="relative h-3.5 w-8 shrink-0 bg-muted" />
+          <Skeleton className="relative h-3.5 w-8 shrink-0" />
         </div>
       ))}
     </BarListRoot>
