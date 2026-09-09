@@ -1,6 +1,7 @@
 "use client"
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
+import { Drawer } from "@base-ui/react/drawer"
 import { type ComponentProps, createContext, type ReactNode, use } from "react"
 import { Button } from "~/components/button"
 import {
@@ -10,34 +11,87 @@ import {
   SectionHeaderTitle,
 } from "~/components/section-header"
 import { XIcon } from "~/lib/icons"
+import { useBelowSm } from "~/lib/media"
 import { variants, cn, type VariantProps } from "~/lib/variants"
 
-const Dialog = DialogPrimitive.Root
-const DialogTrigger = DialogPrimitive.Trigger
+/**
+ * Whether this dialog is the phone bottom sheet. Under `sm` the whole thing is a Base UI
+ * Drawer instead of a Dialog: same parts, same markup, plus the swipe-down-to-dismiss and
+ * rubber-banding a sheet is expected to have. Every part reads this to pick its own set.
+ */
+const SheetContext = createContext(false)
+
+/** The drawer's parts under the dialog's names — the ones in play here are the same set. */
+const DrawerParts = Drawer as unknown as typeof DialogPrimitive
+
+function useParts() {
+  return use(SheetContext) ? DrawerParts : DialogPrimitive
+}
+
+function Dialog(props: DialogPrimitive.Root.Props) {
+  const sheet = useBelowSm()
+  const Root = sheet ? DrawerParts.Root : DialogPrimitive.Root
+
+  return (
+    <SheetContext value={sheet}>
+      <Root {...props} />
+    </SheetContext>
+  )
+}
+
+function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
+  const { Trigger } = useParts()
+  return <Trigger {...props} />
+}
 
 /** `hideClose` from `DialogContent`, read by `DialogHeader` so its own X follows suit. */
 const DialogCloseContext = createContext(false)
 
 /** The one X: a ghost button in the header row when there is a header, else pinned to the corner. */
 function DialogX({ className }: { className?: string }) {
+  const { Close } = useParts()
+
   return (
-    <DialogPrimitive.Close
+    <Close
       render={<Button variant="ghost" size="sm" aria-label="Close" prefix={<XIcon />} />}
       className={cn("pointer-coarse:size-10", className)}
     />
   )
 }
-const DialogTitle = DialogPrimitive.Title
-const DialogDescription = DialogPrimitive.Description
+
+function DialogTitle(props: DialogPrimitive.Title.Props) {
+  const { Title } = useParts()
+  return <Title {...props} />
+}
+
+function DialogDescription(props: DialogPrimitive.Description.Props) {
+  const { Description } = useParts()
+  return <Description {...props} />
+}
 
 /** The dashed, blurred backdrop behind the dialog. Rendered by `DialogContent`. */
 function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) {
+  const sheet = use(SheetContext)
+  const { Backdrop } = useParts()
+
   return (
-    <DialogPrimitive.Backdrop
+    <Backdrop
       className={cn(
         "fixed inset-0 z-50 bg-dashed backdrop-blur-xs",
-        "data-open:animate-in data-closed:animate-out",
-        "data-open:fade-in-0 data-closed:fade-out-0",
+        sheet
+          ? [
+              // A transition, not a keyframe animation: the sheet stays mounted for its own
+              // longer close, and a `fade-out` animation would end early and hand the backdrop
+              // back at full strength for the rest of it. This also lets the backdrop thin out
+              // under the finger, and leave on the curve the swipe's own momentum sets.
+              "opacity-[calc(1-var(--drawer-swipe-progress,0))]",
+              "transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0",
+              "data-starting-style:opacity-0 data-ending-style:opacity-0",
+              "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
+            ]
+          : [
+              "data-open:animate-in data-closed:animate-out data-open:fade-in-0 data-closed:fade-out-0",
+            ],
         className,
       )}
       {...props}
@@ -46,16 +100,12 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
 }
 
 const dialogContentVariants = variants({
+  // Only ever rendered from `sm` up: under it the dialog is a drawer instead (`sheetPopup`).
   base: [
-    "fixed z-50 grid overflow-y-auto border bg-card shadow-sm",
-    // Under `sm` the dialog is a bottom sheet: full width, pinned to the bottom edge,
-    // padded past the home indicator.
-    "max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[calc(100dvh-3rem)] max-sm:rounded-t-2xl max-sm:border-b-0",
-    "sm:left-1/2 sm:w-[calc(100vw-2rem)] sm:-translate-x-1/2 sm:rounded-xl",
+    "fixed left-1/2 z-50 grid w-[calc(100vw-2rem)] -translate-x-1/2 overflow-y-auto rounded-xl border bg-card shadow-sm",
     "data-open:animate-in data-closed:animate-out",
     "data-open:fade-in-0 data-closed:fade-out-0",
     "data-open:slide-in-from-bottom-4 data-closed:slide-out-to-bottom-4",
-    "max-sm:data-open:slide-in-from-bottom-8 max-sm:data-closed:slide-out-to-bottom-8",
   ],
 
   variants: {
@@ -77,8 +127,8 @@ const dialogContentVariants = variants({
      * (`[[role=dialog]~&]`) sits a little lower still, so both remain visible.
      */
     fixed: {
-      true: "sm:top-[10vh] sm:max-h-[calc(90vh-2rem)] sm:[[role=dialog]~&]:top-[15vh] sm:[[role=dialog]~&]:max-h-[calc(85vh-2rem)]",
-      false: "sm:top-1/2 sm:-translate-y-1/2 sm:max-h-[calc(100vh-2rem)]",
+      true: "top-[10vh] max-h-[calc(90vh-2rem)] [[role=dialog]~&]:top-[15vh] [[role=dialog]~&]:max-h-[calc(85vh-2rem)]",
+      false: "top-1/2 max-h-[calc(100vh-2rem)] -translate-y-1/2",
     },
 
     /**
@@ -86,8 +136,8 @@ const dialogContentVariants = variants({
      * own borders, e.g. a bordered header over a scrolling body over a bordered footer.
      */
     flush: {
-      true: "gap-0 p-0 max-sm:pb-[env(safe-area-inset-bottom)]",
-      false: "gap-6 p-6 max-sm:pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
+      true: "gap-0 p-0",
+      false: "gap-6 p-6",
     },
   },
 
@@ -109,6 +159,38 @@ type DialogContentProps = Omit<DialogPrimitive.Popup.Props, "className"> &
     hideClose?: boolean
   }
 
+/**
+ * The sheet itself: full width against the bottom edge, following the finger down and then
+ * either springing back or riding the swipe's own momentum out. `touch-none` hands vertical
+ * drags to the drawer; the body inside takes them back with `touch-auto` and only gives them
+ * up once it is scrolled to the top, so a swipe on a scrolled list scrolls it.
+ */
+const sheetPopup = [
+  "flex max-h-[calc(100dvh-3rem)] w-full touch-none flex-col overflow-hidden rounded-t-2xl border border-b-0 bg-card shadow-sm outline-none",
+  "[transform:translateY(var(--drawer-swipe-movement-y))]",
+  "transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
+  "data-swiping:select-none data-swiping:duration-0",
+  "data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]",
+  "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
+]
+
+const sheetContentVariants = variants({
+  // `relative` anchors the corner X, as `fixed` does on the dialog's own popup
+  base: "relative grid min-h-0 flex-1 touch-auto overflow-y-auto overscroll-contain",
+
+  variants: {
+    /** As on the dialog, plus room past the home indicator; the grabber covers the top edge */
+    flush: {
+      true: "gap-0 p-0 pb-[env(safe-area-inset-bottom)]",
+      false: "gap-6 p-6 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
+    },
+  },
+
+  defaultVariants: {
+    flush: false,
+  },
+})
+
 function DialogContent({
   className,
   children,
@@ -118,6 +200,42 @@ function DialogContent({
   hideClose,
   ...props
 }: DialogContentProps) {
+  const sheet = use(SheetContext)
+
+  const body = (
+    <>
+      <DialogCloseContext value={!!hideClose}>{children}</DialogCloseContext>
+
+      {/* Corner fallback for a dialog without a `DialogHeader`, which hosts the X itself */}
+      {!hideClose && (
+        <DialogX className="absolute top-3 right-3 z-20 pointer-coarse:top-1.5 pointer-coarse:right-1.5 [[data-slot=dialog-header]~&]:hidden" />
+      )}
+    </>
+  )
+
+  // A sheet spans the phone's width, so `size` has nothing to constrain and is dropped
+  if (sheet) {
+    return (
+      <Drawer.Portal>
+        <DialogOverlay />
+
+        <Drawer.Viewport className="fixed inset-0 z-50 flex items-end">
+          <Drawer.Popup
+            className={cn(sheetPopup)}
+            {...(props as ComponentProps<typeof Drawer.Popup>)}
+          >
+            {/* The grabber: says the sheet pulls down, and is the one part always in reach */}
+            <div className="mx-auto my-2.5 h-1 w-9 shrink-0 rounded-full bg-border" />
+
+            <Drawer.Content className={sheetContentVariants({ flush, className })}>
+              {body}
+            </Drawer.Content>
+          </Drawer.Popup>
+        </Drawer.Viewport>
+      </Drawer.Portal>
+    )
+  }
+
   return (
     <DialogPrimitive.Portal>
       <DialogOverlay />
@@ -126,12 +244,7 @@ function DialogContent({
         className={dialogContentVariants({ size, fixed, flush, className })}
         {...props}
       >
-        <DialogCloseContext value={!!hideClose}>{children}</DialogCloseContext>
-
-        {/* Corner fallback for a dialog without a `DialogHeader`, which hosts the X itself */}
-        {!hideClose && (
-          <DialogX className="absolute top-3 right-3 z-20 pointer-coarse:top-1.5 pointer-coarse:right-1.5 [[data-slot=dialog-header]~&]:hidden" />
-        )}
+        {body}
       </DialogPrimitive.Popup>
     </DialogPrimitive.Portal>
   )
@@ -232,7 +345,8 @@ function DialogFooter({ className, bordered, ...props }: DialogFooterProps) {
 }
 
 function DialogClose({ ...props }: ComponentProps<typeof Button>) {
-  return <DialogPrimitive.Close render={<Button variant="secondary" {...props} />} />
+  const { Close } = useParts()
+  return <Close render={<Button variant="secondary" {...props} />} />
 }
 
 export {

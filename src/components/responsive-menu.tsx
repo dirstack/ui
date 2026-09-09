@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState, useSyncExternalStore, type ReactElement, type ReactNode } from "react"
+import { Fragment, useState, type ReactElement, type ReactNode } from "react"
 import { Button } from "~/components/button"
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "~/components/dialog"
 import {
@@ -13,32 +13,8 @@ import {
   MenuTrigger,
 } from "~/components/menu"
 import { CheckIcon } from "~/lib/icons"
+import { useBelowSm } from "~/lib/media"
 import { cn } from "~/lib/variants"
-
-/**
- * Below Tailwind's `sm` (40rem), i.e. the phone layout. Kept as a constant so this JS-driven
- * switch flips on exactly the same pixel as the `max-sm:` classes `DialogContent` uses to turn
- * itself into a bottom sheet.
- */
-const BELOW_SM = "(max-width: 39.9375rem)"
-
-function subscribe(onChange: () => void) {
-  const query = matchMedia(BELOW_SM)
-  query.addEventListener("change", onChange)
-  return () => query.removeEventListener("change", onChange)
-}
-
-/**
- * Whether the viewport is under `sm`. False on the server and through hydration, so the first
- * client render matches the markup. Private: the media query is this component's own concern.
- */
-function useMediaQuery() {
-  return useSyncExternalStore(
-    subscribe,
-    () => matchMedia(BELOW_SM).matches,
-    () => false,
-  )
-}
 
 export type ResponsiveMenuItem = {
   label: ReactNode
@@ -83,7 +59,7 @@ export function ResponsiveMenu({
   className,
 }: ResponsiveMenuProps) {
   const [open, setOpen] = useState(false)
-  const isPhone = useMediaQuery()
+  const isPhone = useBelowSm()
 
   if (isPhone) {
     return (

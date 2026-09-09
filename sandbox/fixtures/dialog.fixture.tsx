@@ -68,6 +68,25 @@ export default {
     </Dialog>
   ),
 
+  // Under `sm` this is a drawer: pull it down to dismiss, and scroll the list inside it first
+  scrolling: (
+    <Dialog>
+      <DialogTrigger render={<Button variant="secondary">Open long dialog</Button>} />
+
+      <DialogContent flush size="lg">
+        <DialogHeader bordered title="Referrers" className="sticky top-0 z-10 bg-card" />
+
+        <div className="p-4">
+          {Array.from({ length: 40 }, (_, index) => (
+            <div key={index} className="border-b py-3 text-sm last:border-0">
+              Row {index + 1}
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  ),
+
   hideClose: (
     <Dialog>
       <DialogTrigger render={<Button variant="secondary">Open without close</Button>} />
